@@ -81,7 +81,7 @@ namespace Fotricle.Controllers
             }
 
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
-            string jwtToken = jwtAuthUtil.GenerateToken(customer.Id);
+            string jwtToken = jwtAuthUtil.GenerateToken(customer.Id,"0");
             return Request.CreateResponse(HttpStatusCode.OK, new
             {
                 result = true,

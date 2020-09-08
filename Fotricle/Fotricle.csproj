@@ -172,7 +172,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OpenTimesController.cs" />
     <Compile Include="Controllers\ProductListsController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\ValueController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -203,6 +203,7 @@
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\ProductList.cs" />
     <Compile Include="Models\Utility.cs" />
+    <Compile Include="Models\ViewCart.cs" />
     <Compile Include="Models\ViewProductBool.cs" />
     <Compile Include="Models\ViewBrand.cs" />
     <Compile Include="Models\ViewCustomer.cs" />
