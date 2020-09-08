@@ -19,6 +19,7 @@ namespace Fotricle.Controllers
 
 
         //新增購物車
+        [HttpPost]
         [Route("cart/add")]
         [JwtAuthFilter]
         public IHttpActionResult PostCart(ViewCart viewCart)
