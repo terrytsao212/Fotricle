@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -167,6 +168,23 @@ namespace Fotricle.Models
         //    FormsAuthentication.SignOut();
         //}
 
-
+        #region"儲存上傳圖片"
+        /// <summary>
+        /// 儲存上傳圖片
+        /// </summary>
+        /// <param name="uploadFile">HttpPostedFile 物件</param>
+        /// <returns>儲存檔名</returns>
+        public static string UploadImage(HttpPostedFile uploadFile)
+        {
+            string fileName = Path.GetFileName(uploadFile.FileName);
+            //取得副檔名
+            string extension = fileName.Split('.')[fileName.Split('.').Length - 1];
+            //新檔案名稱
+            fileName = $"{DateTime.Now.ToString("yyyyMMddhhmmss")}.{extension}";
+            string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Upload/customer"), fileName);
+            uploadFile.SaveAs(path);
+            return fileName;
+        }
+        #endregion
     }
 }
