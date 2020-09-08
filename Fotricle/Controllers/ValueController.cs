@@ -10,9 +10,10 @@ namespace Fotricle.Controllers
 {
     public class ValueController : ApiController
     {
-        [JwtAuthFilter]
+        
         [HttpGet]
         [Route("GetIdentity")]
+        [JwtAuthFilter]
         public IHttpActionResult GetIdentity()
         {
             string token = Request.Headers.Authorization.Parameter;
