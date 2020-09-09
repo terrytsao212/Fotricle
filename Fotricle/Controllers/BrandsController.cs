@@ -221,25 +221,16 @@ namespace Fotricle.Controllers
             }
 
             Brand brand = db.Brands.Find(Id);
-            ViewBrand brandDetail = new ViewBrand();
-            brandDetail.BrandName = brand.BrandName;
-            brandDetail.BrandStory = brand.BrandStory;
-            brandDetail.PhoneNumber = brand.PhoneNumber;
-            brandDetail.Sort = brand.Sort;
-            brandDetail.LinePay = brand.LinePay;
-            brandDetail.CarImage = brand.CarImage;
-            brandDetail.QrCode = brand.QrCode;
-            brandDetail.LogoPhoto = brand.LogoPhoto;
-            if (brandDetail == null)
-            {
-                return Ok(new
-                {
-                    result = false,
-                    ModelState,
-                    message = "載入失敗"
-                });
-            }
-            return Ok(brandDetail);
+            //var BrandGet = new
+            //{
+            //    brand.BrandName,
+            //    brand.BrandStory,
+            //    brand.LinePay,
+            //    brand.LogoPhoto,
+            //    brand.Verification
+            //};
+
+            return Ok(brand);
         }
 
 

@@ -232,8 +232,8 @@ namespace Fotricle.Controllers
 
         //Get顧客全部資料
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("member/All")]
-        public IHttpActionResult GetGustomers()
+        [System.Web.Http.Route("customer/All")]
+        public IHttpActionResult GetCustomers()
         {
             var customer = db.Customers.Select(c => new
             {

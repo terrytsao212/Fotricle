@@ -72,20 +72,31 @@ namespace Fotricle.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        ////拿指定餐車的產品
-        //[System.Web.Http.HttpGet]
-        //[System.Web.Http.Route("ProductList/Brand")]
-        //public IHttpActionResult GetBrandP(int id, [Bind(Include = "Id")] ViewBrand viewBrand,ViewProducts viewProducts)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    Brand brandsBrand=new Brand();
-        //    brandsBrand = db.Brands.Find(id);
-            
-
-        //}
+        //拿品牌的產品資料(整筆)
+        [JwtAuthFilter]
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("ProductLists/Gets")]
+        public IHttpActionResult GetProducts()
+        {
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            var products = db.ProductLists.Where(c => c.BrandId == id).Select(c => new
+            {
+                c.Id,
+                c.BrandId,
+                c.ProductName,
+                c.ProductDetail,
+                c.ProductPhoto,
+                c.IsUse,
+                c.Price,
+                c.ProductSort,
+                c.Total,
+                c.Unit
+            });
+          
+            return Ok(new { success = true, products });
+        }
 
         // POST: 新增產品
         [System.Web.Http.HttpPost]
