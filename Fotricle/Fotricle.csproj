@@ -188,6 +188,10 @@
     <Compile Include="Migrations\202009080311492_editorder.Designer.cs">
       <DependentUpon>202009080311492_editorder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009090945144_changeopentimetype.cs" />
+    <Compile Include="Migrations\202009090945144_changeopentimetype.Designer.cs">
+      <DependentUpon>202009090945144_changeopentimetype.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Brand.cs" />
@@ -309,6 +313,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009080311492_editorder.resx">
       <DependentUpon>202009080311492_editorder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009090945144_changeopentimetype.resx">
+      <DependentUpon>202009090945144_changeopentimetype.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

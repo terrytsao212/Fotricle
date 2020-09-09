@@ -18,7 +18,9 @@ namespace Fotricle.Controllers
     {
         private Model1 db = new Model1();
 
-        // GET: api/OpenTimes
+        // GET: 拿營業資訊
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("OpenTime/Get")]
         public IQueryable<OpenTime> GetOpenTimes()
         {
             return db.OpenTimes;

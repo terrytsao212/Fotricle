@@ -112,6 +112,38 @@ namespace Fotricle.Controllers
             return Ok(cart);
         }
 
+        // 清空購物車
+        [Route("cart/ALL")]
+        [JwtAuthFilter]
+
+
+        public IHttpActionResult DeleteCartAll()
+        {
+
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+
+
+            // Cart cart = db.Carts.Find(id);
+            var carts = db.Carts.Where(c => c.CustomerId == id);
+
+
+            db.Carts.RemoveRange(carts);
+            // db.Carts.AddRange()
+            //foreach (var c in carts)
+            //{
+            //    db.Carts.Remove(c);
+            //}
+            db.SaveChanges();
+
+            return Ok(new
+            {
+                result = true,
+                message = "已清空購物車"
+            });
+        }
+
 
 
         // GET: api/Carts

@@ -26,12 +26,10 @@ namespace Fotricle.Models
         public OpenOrNot? Status { get; set; }
 
         [Display(Name = "營業時間起")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime? SDateTime { set; get; }//"?"為允許空值，日期數字才可使用問號
+        public string SDateTime { set; get; }
 
         [Display(Name = "營業時間迄")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime? EDateTimeDate { set; get; }//"?"為允許空值，日期數字才可使用問
+        public string EDateTimeDate { set; get; }//"?"為允許空值，日期數字才可使用問
 
         [Display(Name = "營業位置")]
         [MaxLength(length: 50)]//最大長度為200
