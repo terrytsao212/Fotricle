@@ -187,4 +187,12 @@ namespace Fotricle.Models
         }
         #endregion
     }
+
+
+
+
+
+
+
+
 }

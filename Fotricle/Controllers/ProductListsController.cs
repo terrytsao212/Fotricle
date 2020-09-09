@@ -90,12 +90,12 @@ namespace Fotricle.Controllers
                 c.ProductPhoto,
                 c.IsUse,
                 c.Price,
-                c.ProductSort,
+                sort=c.ProductSort.ToString(),
                 c.Total,
                 c.Unit
             });
           
-            return Ok(new { success = true, products });
+            return Ok(new {success = true, products});
         }
 
         // POST: 新增產品
@@ -173,6 +173,7 @@ namespace Fotricle.Controllers
 
             return Ok(new
             {
+                //productname=product.ProductSort.ToString(),
                 result = true,
                 message = "產品修改成功"
             });
@@ -244,7 +245,12 @@ namespace Fotricle.Controllers
                 product.IsUse = true;
             //product.IsUse = productsList.IsUse  == Use.否? false :true ;
 
-            return Ok(product);
+            return Ok(new
+            {
+                product,
+                productName = product.ProductSort.ToString(),
+            });
+
 
 
         }

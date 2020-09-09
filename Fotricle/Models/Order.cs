@@ -37,7 +37,7 @@ namespace Fotricle.Models
         public string OrderNumber { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         [Display(Name = "取餐單號")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MealNumber { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         [Display(Name = "總金額")]
