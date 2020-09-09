@@ -10,17 +10,15 @@ namespace Fotricle.Controllers
 {
     public class ValueController : ApiController
     {
-        
+
+        [JwtAuthFilter]
         [HttpGet]
         [Route("GetIdentity")]
-        [JwtAuthFilter]
         public IHttpActionResult GetIdentity()
         {
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             string identity = jwtAuthUtil.GetIdentity(token);
-           
-
             if (identity == "0")
             {
                 return Ok(new
@@ -30,15 +28,13 @@ namespace Fotricle.Controllers
                 });
             }
             else if (identity == "1")
-
             {
                 return Ok(new
                 {
-                    result = false,
+                    result = true,
                     message = "餐車"
                 });
             }
-
             return Ok(new
             {
                 result = false,
