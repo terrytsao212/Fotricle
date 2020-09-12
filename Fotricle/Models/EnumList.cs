@@ -60,8 +60,8 @@ namespace Fotricle.Models
 
     public enum Site
     {
-        否 = 0,
-        是 = 1,
+        非現場 = 0,
+        現場 = 1,
     }
 
     public enum Blacklist

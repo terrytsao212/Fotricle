@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Fotricle.Models;
+using Fotricle.Security;
 
 namespace Fotricle.Controllers
 {
@@ -21,6 +22,55 @@ namespace Fotricle.Controllers
         {
             return db.Orders;
         }
+
+
+        //拿餐車pos的訂單
+
+        [HttpGet]
+        [JwtAuthFilter]
+        [Route("BrandOrder/Get")]
+        public IHttpActionResult GetBrandOrder()
+        {
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            var order=db.OrderDetails.Join(db.Orders,c=>c.OrderId,o=>o.CustomerId,(c,o)=>c.Id)
+            {
+                
+                    c.CustomerId,
+                    c.OrderNumber,
+                    c.CompleteTime,
+                    c.Amount,
+                    c.LinepayVer,
+                    c.MealNumber,
+                    c.OrderDetails,
+                    c.Payment,
+                    c.Remarks,
+                    status = c.OrderStatus.ToString(),
+                    site = c.Site == Site.非現場 ? false : true,
+                    c.OrderTime
+            }
+            //var order = db.Orders.Where(c => c.BrandId == id).Select(c => new
+            //{
+            //    c.BrandId,
+            //    c.CustomerId,
+            //    c.OrderNumber,
+            //    c.CompleteTime,
+            //    c.Amount,
+            //    c.LinepayVer,
+            //    c.MealNumber,
+            //    c.OrderDetails,
+            //    c.Payment,
+            //    c.Remarks,
+            //    status=c.OrderStatus.ToString(),
+            //    site=c.Site == Site.非現場?false:true,
+            //    c.OrderTime
+
+            //});
+            //return Ok(new { success = true, order });
+
+        }
+
 
         // GET: api/BrandOrders/5
         [ResponseType(typeof(Order))]
