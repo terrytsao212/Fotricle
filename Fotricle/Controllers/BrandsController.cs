@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Mvc;
@@ -129,6 +130,7 @@ namespace Fotricle.Controllers
             brand.BrandName = viewBrand.BrandName;
             brand.BrandStory = viewBrand.BrandStory;
             brand.PhoneNumber = viewBrand.PhoneNumber;
+
             brand.Sort = viewBrand.Sort;
             brand.LinePay = viewBrand.LinePay;
             brand.CarImage = viewBrand.CarImage;
@@ -140,6 +142,8 @@ namespace Fotricle.Controllers
             db.SaveChanges();
             return Ok(new
             {
+                brand,
+                sort=brand.Sort.ToString(),
                 result = true,
                 message = "新增修改成功"
             });
@@ -174,7 +178,7 @@ namespace Fotricle.Controllers
 
         //Get品牌單一資料
         [System.Web.Http.HttpGet]
-        [JwtAuthFilter]
+        //[JwtAuthFilter]
         [System.Web.Http.Route("Brand/Detail")]
         //public IHttpActionResult BrandDetail(string id,
         //    [Bind(Include = "Id,BrandName,BrandStory,PhoneNumber,Sort,LinePay,CarImage,QrCode,LogoPhoto")]
@@ -221,25 +225,14 @@ namespace Fotricle.Controllers
             }
 
             Brand brand = db.Brands.Find(Id);
-            ViewBrand brandDetail = new ViewBrand();
-            brandDetail.BrandName = brand.BrandName;
-            brandDetail.BrandStory = brand.BrandStory;
-            brandDetail.PhoneNumber = brand.PhoneNumber;
-            brandDetail.Sort = brand.Sort;
-            brandDetail.LinePay = brand.LinePay;
-            brandDetail.CarImage = brand.CarImage;
-            brandDetail.QrCode = brand.QrCode;
-            brandDetail.LogoPhoto = brand.LogoPhoto;
-            if (brandDetail == null)
+
+            return Ok(new
             {
-                return Ok(new
-                {
-                    result = false,
-                    ModelState,
-                    message = "載入失敗"
-                });
-            }
-            return Ok(brandDetail);
+                brand,
+                sort = brand.Sort.ToString(),
+       
+            });
+        
         }
 
 
@@ -273,11 +266,74 @@ namespace Fotricle.Controllers
             return Ok(aa);
         }
 
+        //上傳餐車資料照片
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("BrandPhoto/upload")]
+        [JwtAuthFilter]
+
+        public HttpResponseMessage PostUploadImage()
+        {
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            Brand brand = db.Brands.Find(id);
+
+            try
+            {
+                var file = HttpContext.Current.Request.Files.Count > 0
+                    ? HttpContext.Current.Request.Files[0]
+                    : null;
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    //新的檔案名稱
+                    string fileName = Utility.UploadBrandImage(file);
+
+
+                    //產生圖片連結
+                    UriBuilder uriBuilder = new UriBuilder(HttpContext.Current.Request.Url)
+                    {
+                        Path = $"/Upload/brand/info/{fileName}"
+                    };
+
+                    Uri imageUrl = uriBuilder.Uri;
+                    brand.LogoPhoto = imageUrl.ToString();
+                    brand.CarImage = imageUrl.ToString();
+                    brand.QrCode = imageUrl.ToString();
+
+                    db.Entry(brand).State = EntityState.Modified;
+                    db.SaveChanges();
+
+
+                    return Request.CreateResponse(HttpStatusCode.OK, new
+                    {
+                        success = true,
+                        message = "圖片上傳成功",
+                        imageUrl
+
+                    });
+
+                }
+
+
+                return Request.CreateResponse(HttpStatusCode.OK, new
+                {
+                    result = false,
+                    message = "請選擇上傳圖片!"
+                });
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
 
 
 
         // PUT: api/Brands/5
-        [ResponseType(typeof(void))]
+            [ResponseType(typeof(void))]
         public IHttpActionResult PutBrand(int id, Brand brand)
         {
             if (!ModelState.IsValid)

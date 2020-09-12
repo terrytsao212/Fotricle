@@ -186,5 +186,34 @@ namespace Fotricle.Models
             return fileName;
         }
         #endregion
+
+        public static string UploadBrandImage(HttpPostedFile uploadFile)
+        {
+            string fileName = Path.GetFileName(uploadFile.FileName);
+            //取得副檔名
+            string extension = fileName.Split('.')[fileName.Split('.').Length - 1];
+            //新檔案名稱
+            fileName = $"{DateTime.Now.ToString("yyyyMMddhhmmss")}.{extension}";
+            string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Upload/brand/Info/"), fileName);
+            uploadFile.SaveAs(path);
+            return fileName;
+        }
+
+
+        public static string UploadProductImage(HttpPostedFile uploadFile)
+        {
+            string fileName = Path.GetFileName(uploadFile.FileName);
+            //取得副檔名
+            string extension = fileName.Split('.')[fileName.Split('.').Length - 1];
+            //新檔案名稱
+            fileName = $"{DateTime.Now.ToString("yyyyMMddhhmmss")}.{extension}";
+            string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Upload/brand/product/"), fileName);
+            uploadFile.SaveAs(path);
+            return fileName;
+        }
+
+
     }
+
+
 }

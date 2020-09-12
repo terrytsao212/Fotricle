@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Mvc;
@@ -72,20 +73,32 @@ namespace Fotricle.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        ////拿指定餐車的產品
-        //[System.Web.Http.HttpGet]
-        //[System.Web.Http.Route("ProductList/Brand")]
-        //public IHttpActionResult GetBrandP(int id, [Bind(Include = "Id")] ViewBrand viewBrand,ViewProducts viewProducts)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    Brand brandsBrand=new Brand();
-        //    brandsBrand = db.Brands.Find(id);
-            
-
-        //}
+        //拿品牌的產品資料(整筆)
+        
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("ProductLists/Gets")]
+        public IHttpActionResult GetProducts(int id)
+        {
+            //string token = Request.Headers.Authorization.Parameter;
+            //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            Brand brand = db.Brands.Find(id);
+            var products = db.ProductLists.Where(c => c.BrandId == id).Select(c => new
+            {
+                c.Id,
+                c.BrandId,
+                c.ProductName,
+                c.ProductDetail,
+                c.ProductPhoto,
+                c.IsUse,
+                c.Price,
+                sort=c.ProductSort.ToString(),
+                c.Total,
+                c.Unit
+            });
+          
+            return Ok(new {success = true, products});
+        }
 
         // POST: 新增產品
         [System.Web.Http.HttpPost]
@@ -162,6 +175,7 @@ namespace Fotricle.Controllers
 
             return Ok(new
             {
+                //productname=product.ProductSort.ToString(),
                 result = true,
                 message = "產品修改成功"
             });
@@ -233,10 +247,80 @@ namespace Fotricle.Controllers
                 product.IsUse = true;
             //product.IsUse = productsList.IsUse  == Use.否? false :true ;
 
-            return Ok(product);
+            return Ok(new
+            {
+                product,
+                ProductSort=product.ProductSort.ToString(),
+                productName = product.ProductSort.ToString(),
+            });
+
 
 
         }
+
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("ProductPhoto/upload")]
+        [JwtAuthFilter]
+
+        public HttpResponseMessage PostUploadImage()
+        {
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            Brand brand = db.Brands.Find(id);
+
+            try
+            {
+                var file = HttpContext.Current.Request.Files.Count > 0
+                    ? HttpContext.Current.Request.Files[0]
+                    : null;
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    //新的檔案名稱
+                    string fileName = Utility.UploadProductImage(file);
+
+
+                    //產生圖片連結
+                    UriBuilder uriBuilder = new UriBuilder(HttpContext.Current.Request.Url)
+                    {
+                        Path = $"/Upload/brand/product/{fileName}"
+                    };
+
+                    Uri imageUrl = uriBuilder.Uri;
+                    brand.LogoPhoto = imageUrl.ToString();
+                    brand.CarImage = imageUrl.ToString();
+                    brand.QrCode = imageUrl.ToString();
+
+                    db.Entry(brand).State = EntityState.Modified;
+                    db.SaveChanges();
+
+
+                    return Request.CreateResponse(HttpStatusCode.OK, new
+                    {
+                        success = true,
+                        message = "圖片上傳成功",
+                        imageUrl
+
+                    });
+
+                }
+
+
+                return Request.CreateResponse(HttpStatusCode.OK, new
+                {
+                    result = false,
+                    message = "請選擇上傳圖片!"
+                });
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
 
         ////拿產品資訊(token)
         //[System.Web.Http.HttpGet]
@@ -244,7 +328,7 @@ namespace Fotricle.Controllers
         //[System.Web.Http.Route("Products/Gets")]
         //public HttpResponseMessage ProductGet(int Id)
         //{
-            
+
         //    ProductList productsList = db.ProductLists.Find(Id);
         //    ViewProducts viewProducts = new ViewProducts();
         //    viewProducts.ProductName = productsList.ProductName;
@@ -266,7 +350,7 @@ namespace Fotricle.Controllers
         //        token = jwtToken
         //    });
 
-        
+
 
         protected override void Dispose(bool disposing)
         {

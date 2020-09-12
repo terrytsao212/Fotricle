@@ -112,6 +112,75 @@ namespace Fotricle.Controllers
             return Ok(cart);
         }
 
+        // 清空購物車
+        [Route("cart/ALL")]
+        [JwtAuthFilter]
+
+
+        public IHttpActionResult DeleteCartAll()
+        {
+
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+
+
+            // Cart cart = db.Carts.Find(id);
+            var carts = db.Carts.Where(c => c.CustomerId == id);
+
+
+            db.Carts.RemoveRange(carts);
+            // db.Carts.AddRange()
+            //foreach (var c in carts)
+            //{
+            //    db.Carts.Remove(c);
+            //}
+            db.SaveChanges();
+
+            return Ok(new
+            {
+                result = true,
+                message = "已清空購物車"
+            });
+        }
+
+        //Get顧客購物車資料
+        [HttpGet]
+        [Route("cart/customer/{cartId}")]
+        [JwtAuthFilter]
+
+        public IHttpActionResult GetCart(int cartId)
+        {
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+
+
+            var carts = db.Carts.Where(cart => cart.CustomerId == id)
+                .Select(cart => new
+                {
+                    cart.Id,
+                    cart.CustomerId,
+                    cart.BrandId,
+                    cart.BrandName,
+                    ProductList = new
+                    {
+                        cart.ProductListId,
+                        cart.ProductName,
+                        cart.ProductUnit,
+                        cart.Amount
+                    }
+                });
+            return Ok(new
+            {
+                result = true,
+                carts
+            });
+
+
+        }
+
+
 
 
         // GET: api/Carts
@@ -121,17 +190,17 @@ namespace Fotricle.Controllers
         }
 
         // GET: api/Carts/5
-        [ResponseType(typeof(Cart))]
-        public IHttpActionResult GetCart(int id)
-        {
-            Cart cart = db.Carts.Find(id);
-            if (cart == null)
-            {
-                return NotFound();
-            }
+        //[ResponseType(typeof(Cart))]
+        //public IHttpActionResult GetCart(int id)
+        //{
+        //    Cart cart = db.Carts.Find(id);
+        //    if (cart == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(cart);
-        }
+        //    return Ok(cart);
+        //}
 
         // PUT: api/Carts/5
         [ResponseType(typeof(void))]

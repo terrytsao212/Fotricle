@@ -168,7 +168,7 @@ namespace Fotricle.Controllers
                     };
 
                     Uri imageUrl = uriBuilder.Uri;
-                    customer.CusPhone = imageUrl.ToString();
+                    customer.CusPhoto = imageUrl.ToString();
 
                     db.Entry(customer).State = EntityState.Modified;
                     db.SaveChanges();
@@ -225,6 +225,8 @@ namespace Fotricle.Controllers
                     customer.Email,
                     customer.Gender,
                     customer.Age,
+                    customer.CusPhoto
+                    
                 }
             });
         }
@@ -232,8 +234,8 @@ namespace Fotricle.Controllers
 
         //Get顧客全部資料
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("member/All")]
-        public IHttpActionResult GetGustomers()
+        [System.Web.Http.Route("customer/All")]
+        public IHttpActionResult GetCustomers()
         {
             var customer = db.Customers.Select(c => new
             {
