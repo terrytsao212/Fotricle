@@ -178,7 +178,7 @@ namespace Fotricle.Controllers
 
         //Get品牌單一資料
         [System.Web.Http.HttpGet]
-        [JwtAuthFilter]
+        //[JwtAuthFilter]
         [System.Web.Http.Route("Brand/Detail")]
         //public IHttpActionResult BrandDetail(string id,
         //    [Bind(Include = "Id,BrandName,BrandStory,PhoneNumber,Sort,LinePay,CarImage,QrCode,LogoPhoto")]
@@ -268,7 +268,7 @@ namespace Fotricle.Controllers
 
         //上傳餐車資料照片
         [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("BrandInfo/upload")]
+        [System.Web.Http.Route("BrandPhoto/upload")]
         [JwtAuthFilter]
 
         public HttpResponseMessage PostUploadImage()
@@ -287,13 +287,13 @@ namespace Fotricle.Controllers
                 if (file != null && file.ContentLength > 0)
                 {
                     //新的檔案名稱
-                    string fileName = Utility.UploadImage(file);
+                    string fileName = Utility.UploadBrandImage(file);
 
 
                     //產生圖片連結
                     UriBuilder uriBuilder = new UriBuilder(HttpContext.Current.Request.Url)
                     {
-                        Path = $"/Upload/brand/info{fileName}"
+                        Path = $"/Upload/brand/info/{fileName}"
                     };
 
                     Uri imageUrl = uriBuilder.Uri;
@@ -308,7 +308,7 @@ namespace Fotricle.Controllers
                     return Request.CreateResponse(HttpStatusCode.OK, new
                     {
                         success = true,
-                        message = "上傳成功",
+                        message = "圖片上傳成功",
                         imageUrl
 
                     });

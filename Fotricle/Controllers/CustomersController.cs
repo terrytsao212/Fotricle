@@ -168,7 +168,7 @@ namespace Fotricle.Controllers
                     };
 
                     Uri imageUrl = uriBuilder.Uri;
-                    customer.CusPhone = imageUrl.ToString();
+                    customer.CusPhoto = imageUrl.ToString();
 
                     db.Entry(customer).State = EntityState.Modified;
                     db.SaveChanges();
@@ -225,6 +225,8 @@ namespace Fotricle.Controllers
                     customer.Email,
                     customer.Gender,
                     customer.Age,
+                    customer.CusPhoto
+                    
                 }
             });
         }
