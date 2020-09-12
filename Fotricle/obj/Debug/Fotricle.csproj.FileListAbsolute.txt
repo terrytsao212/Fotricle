@@ -104,4 +104,4 @@ C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.csprojAssemblyReference.cache
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.EditCart.resources
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.editorder.resources
-C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.changeopentimetype.resources
+C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.changeopentime.resources

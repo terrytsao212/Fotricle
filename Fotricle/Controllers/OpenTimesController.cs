@@ -18,13 +18,38 @@ namespace Fotricle.Controllers
     {
         private Model1 db = new Model1();
 
-        // GET: 拿營業資訊
+        // GET: 拿個別營業資訊
+        [JwtAuthFilter]
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("OpenTime/Get")]
-        public IQueryable<OpenTime> GetOpenTimes()
+        public IHttpActionResult GetOpen()
         {
-            return db.OpenTimes;
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            var open = db.OpenTimes.Where(c => c.BrandId == id).Select(c => new
+            {
+                //c.Id,
+                c.BrandId,
+                c.Date,
+                c.SDateTime,
+                c.EDateTimeDate,
+                status = c.Status.ToString(),
+                c.Location
+                
+            });
+            return Ok(new { success = true, open });
+
+
         }
+
+
+
+
+        //public IQueryable<OpenTime> GetOpenTimes()
+        //{
+        //    return db.OpenTimes;
+        //}
 
         // GET: api/OpenTimes/5
         [ResponseType(typeof(OpenTime))]
@@ -88,7 +113,7 @@ namespace Fotricle.Controllers
             OpenTime open=new OpenTime();
             int id_temp = Convert.ToInt32(id);
             open = db.OpenTimes.Where(x => x.Id == id_temp).FirstOrDefault();
-            open.Date = openTime.Date;
+            open.Date = Convert.ToDateTime(openTime.Date).ToString("d ");
             open.Location = openTime.Location;
             open.SDateTime = openTime.SDateTime;
             open.EDateTimeDate = openTime.EDateTimeDate;
@@ -119,6 +144,7 @@ namespace Fotricle.Controllers
             }
 
             db.OpenTimes.Add(openTime);
+          
             db.SaveChanges();
 
             return Ok(new

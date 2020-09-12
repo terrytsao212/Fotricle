@@ -166,6 +166,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\BrandOrdersController.cs" />
     <Compile Include="Controllers\BrandsController.cs" />
     <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
@@ -188,9 +189,9 @@
     <Compile Include="Migrations\202009080311492_editorder.Designer.cs">
       <DependentUpon>202009080311492_editorder.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202009090945144_changeopentimetype.cs" />
-    <Compile Include="Migrations\202009090945144_changeopentimetype.Designer.cs">
-      <DependentUpon>202009090945144_changeopentimetype.cs</DependentUpon>
+    <Compile Include="Migrations\202009110434477_changeopentime.cs" />
+    <Compile Include="Migrations\202009110434477_changeopentime.Designer.cs">
+      <DependentUpon>202009110434477_changeopentime.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\ProductList.cs" />
     <Compile Include="Models\Utility.cs" />
+    <Compile Include="Models\ViewBrandOrder.cs" />
     <Compile Include="Models\ViewCart.cs" />
     <Compile Include="Models\ViewProductBool.cs" />
     <Compile Include="Models\ViewBrand.cs" />
@@ -314,8 +316,8 @@
     <EmbeddedResource Include="Migrations\202009080311492_editorder.resx">
       <DependentUpon>202009080311492_editorder.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202009090945144_changeopentimetype.resx">
-      <DependentUpon>202009090945144_changeopentimetype.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202009110434477_changeopentime.resx">
+      <DependentUpon>202009110434477_changeopentime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

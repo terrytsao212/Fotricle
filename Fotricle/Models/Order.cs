@@ -27,8 +27,10 @@ namespace Fotricle.Models
         public virtual Customer Customer { set; get; }//virtual的意思是虛擬的
 
         public OrderStatus OrderStatus { get; set; }
+
         [Display(Name = "訂單日期")]
-        public DateTime? OrderTime { set; get; }//"?"為允許空值，日期數字才可使用問號
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime OrderTime { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         public PaymentMethod Payment { get; set; }
 
