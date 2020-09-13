@@ -211,6 +211,8 @@
     <Compile Include="Models\Utility.cs" />
     <Compile Include="Models\ViewBrandOrder.cs" />
     <Compile Include="Models\ViewCart.cs" />
+    <Compile Include="Models\ViewOrder.cs" />
+    <Compile Include="Models\ViewOrderStatus.cs" />
     <Compile Include="Models\ViewProductBool.cs" />
     <Compile Include="Models\ViewBrand.cs" />
     <Compile Include="Models\ViewCustomer.cs" />

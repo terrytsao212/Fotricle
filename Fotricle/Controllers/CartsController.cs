@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Mvc;
 using Fotricle.Models;
 using Fotricle.Security;
 
@@ -19,8 +20,8 @@ namespace Fotricle.Controllers
 
 
         //新增購物車
-        [HttpPost]
-        [Route("cart/add")]
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("cart/add")]
         [JwtAuthFilter]
         public IHttpActionResult PostCart(ViewCart viewCart)
         {
@@ -96,7 +97,7 @@ namespace Fotricle.Controllers
 
 
         // 刪除購物車
-        [Route("cart/{Id}")]
+        [System.Web.Http.Route("cart/{Id}")]
         [JwtAuthFilter]
         public IHttpActionResult DeleteCart(int id)
         {
@@ -113,7 +114,7 @@ namespace Fotricle.Controllers
         }
 
         // 清空購物車
-        [Route("cart/ALL")]
+        [System.Web.Http.Route("cart/ALL")]
         [JwtAuthFilter]
 
 
@@ -145,8 +146,8 @@ namespace Fotricle.Controllers
         }
 
         //Get顧客購物車資料
-        [HttpGet]
-        [Route("cart/customer/{cartId}")]
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("cart/customer/{cartId}")]
         [JwtAuthFilter]
 
         public IHttpActionResult GetCart(int cartId)
@@ -182,6 +183,33 @@ namespace Fotricle.Controllers
 
 
 
+        //修改購物車資料(cart流水Id)
+        [System.Web.Http.HttpPatch]
+        [JwtAuthFilter]
+        [System.Web.Http.Route("cart/Edit")]
+        public IHttpActionResult EditCart(string id, [Bind(Include = "Id,ProductUnit,Amount")] ViewCart viewCart)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Cart cart = new Cart();
+            int id_temp = Convert.ToInt32(id);
+            cart = db.Carts.Where(c => c.Id == id_temp).FirstOrDefault();
+            cart.ProductUnit = viewCart.ProductUnit;
+            cart.Amount = viewCart.Amount;
+
+            db.Entry(cart).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Ok(new
+            {
+                result = true,
+                message = "購物車更新成功"
+            });
+
+        }
+
 
         // GET: api/Carts
         public IQueryable<Cart> GetCarts()
@@ -189,18 +217,7 @@ namespace Fotricle.Controllers
             return db.Carts;
         }
 
-        // GET: api/Carts/5
-        //[ResponseType(typeof(Cart))]
-        //public IHttpActionResult GetCart(int id)
-        //{
-        //    Cart cart = db.Carts.Find(id);
-        //    if (cart == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(cart);
-        //}
+       
 
         // PUT: api/Carts/5
         [ResponseType(typeof(void))]
@@ -252,21 +269,6 @@ namespace Fotricle.Controllers
             return CreatedAtRoute("DefaultApi", new { id = cart.Id }, cart);
         }
 
-        //// DELETE: api/Carts/5
-        //[ResponseType(typeof(Cart))]
-        //public IHttpActionResult DeleteCart(int id)
-        //{
-        //    Cart cart = db.Carts.Find(id);
-        //    if (cart == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    db.Carts.Remove(cart);
-        //    db.SaveChanges();
-
-        //    return Ok(cart);
-        //}
 
         protected override void Dispose(bool disposing)
         {
