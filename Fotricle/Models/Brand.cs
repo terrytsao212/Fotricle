@@ -70,6 +70,7 @@ namespace Fotricle.Models
         public string QrCode { set; get; }
 
         [Display(Name = "品牌FB")]
+        [Required(ErrorMessage = "(0)必填")]//指定回饋報錯
         [MaxLength(length: 50)]//最大長度為200
         [DataType(DataType.Text)]
         public string FbAccount { set; get; }

@@ -55,9 +55,21 @@ namespace Fotricle.Models
         [Display(Name = "訂單完成時間")]
         public DateTime? CompleteTime { set; get; }//"?"為允許空值，日期數字才可使用問號
 
-        [Display(Name = "備註")]
+        [Display(Name = "備註1")]
         [MaxLength(length: 50)]//指定後面nvchar為50
-        public string Remarks { set; get; }
+        public string Remarks1 { set; get; }
+
+        [Display(Name = "備註2")]
+        [MaxLength(length: 50)]//指定後面nvchar為50
+        public string Remarks2 { set; get; }
+
+        [Display(Name = "備註3")]
+        [MaxLength(length: 50)]//指定後面nvchar為50
+        public string Remarks3 { set; get; }
+
+        [Display(Name = "備註4")]
+        [MaxLength(length: 50)]//指定後面nvchar為50
+        public string Remarks4 { set; get; }
 
 
         [Display(Name = "建立時間")]

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,34 +26,35 @@ namespace Fotricle.Controllers
         }
 
 
-        //拿餐車pos的訂單
-
-        [HttpGet]
+        //新增餐車現場訂單
+        [HttpPost]
+        [Route("BrandOrder/add")]
         [JwtAuthFilter]
-        [Route("BrandOrder/Get")]
-        public IHttpActionResult GetBrandOrder()
+        public IHttpActionResult PostBrandOrder(ViewBrandOrder viewBrandOrder)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-            //var order=db.OrderDetails.Join(db.Orders,c=>c.OrderId,o=>o.CustomerId,(c,o)=>c.Id)
-            //{
 
-            //        c.CustomerId,
-            //        c.OrderNumber,
-            //        c.CompleteTime,
-            //        c.Amount,
-            //        c.LinepayVer,
-            //        c.MealNumber,
-            //        c.OrderDetails,
-            //        c.Payment,
-            //        c.Remarks,
-            //        status = c.OrderStatus.ToString(),
-            //        site = c.Site == Site.非現場 ? false : true,
-            //        c.OrderTime
-            //}
+
+
+        }
+
+
+        //拿餐車pos的訂單
+        [HttpGet]
+        //[JwtAuthFilter]
+        [Route("BrandOrder/Get")]
+        public IHttpActionResult GetBrandOrder(int id)
+        {
+            Brand brand = db.Brands.Find(id);
             var order = db.Orders.Where(c => c.BrandId == id).Select(c => new
             {
+                c.Id,
                 c.BrandId,
                 c.CustomerId,
                 c.OrderNumber,
@@ -59,17 +62,41 @@ namespace Fotricle.Controllers
                 c.Amount,
                 c.LinepayVer,
                 c.MealNumber,
-                c.OrderDetails,
                 c.Payment,
-                c.Remarks,
+                c.Remarks1,
+                c.Remarks2,
+                c.Remarks3,
+                c.Remarks4,
                 status = c.OrderStatus.ToString(),
                 site = c.Site == Site.非現場 ? false : true,
-                c.OrderTime
+                c.OrderTime,
+                c.OrderDetails
+
 
             });
             return Ok(new { success = true, order });
 
         }
+        //string token = Request.Headers.Authorization.Parameter;
+        //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+        //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+        //var order=db.OrderDetails.Join(db.Orders,c=>c.OrderId,o=>o.CustomerId,(c,o)=>c.Id)
+        //{
+
+        //        c.CustomerId,
+        //        c.OrderNumber,
+        //        c.CompleteTime,
+        //        c.Amount,
+        //        c.LinepayVer,
+        //        c.MealNumber,
+        //        c.OrderDetails,
+        //        c.Payment,
+        //        c.Remarks,
+        //        status = c.OrderStatus.ToString(),
+        //        site = c.Site == Site.非現場 ? false : true,
+        //        c.OrderTime
+        //}
+
 
 
         // GET: api/BrandOrders/5

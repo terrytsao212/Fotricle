@@ -15,5 +15,8 @@ namespace Fotricle.Models
         [Display(Name = "產品數量")]
 
         public int ProductUnit { set; get; }
+
+        [Display(Name = "金額小計")]
+        public int Amount { set; get; }
     }
 }

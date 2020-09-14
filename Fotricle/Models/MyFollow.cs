@@ -20,6 +20,10 @@ namespace Fotricle.Models
         [Display(Name = "品牌編號")]
         public virtual Brand Brand { set; get; }
 
+        [Display(Name = "品牌名稱")]
+        [MaxLength(length: 50)]//指定後面nvchar為50
+        public string BrandName { set; get; }
+
         public int? CustomerId { get; set; }
 
         [ForeignKey("CustomerId")]
