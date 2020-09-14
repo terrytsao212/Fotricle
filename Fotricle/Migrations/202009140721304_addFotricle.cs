@@ -26,7 +26,7 @@ namespace Fotricle.Migrations
                         Status = c.Int(nullable: false),
                         LinePay = c.String(),
                         QrCode = c.String(),
-                        FbAccount = c.String(maxLength: 50),
+                        FbAccount = c.String(nullable: false, maxLength: 100),
                         Verification = c.Int(nullable: false),
                         Score = c.String(maxLength: 50),
                         InitDate = c.DateTime(),
@@ -39,9 +39,10 @@ namespace Fotricle.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        CustomerId = c.Int(),
-                        ProductListId = c.Int(),
-                        BrandId = c.Int(),
+                        CustomerId = c.Int(nullable: false),
+                        ProductListId = c.Int(nullable: false),
+                        BrandId = c.Int(nullable: false),
+                        BrandName = c.String(),
                         ProductPhoto = c.String(),
                         ProductName = c.String(),
                         ProductUnit = c.Int(nullable: false),
@@ -49,13 +50,7 @@ namespace Fotricle.Migrations
                         Amount = c.Int(nullable: false),
                         InitDate = c.DateTime(),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Brands", t => t.BrandId)
-                .ForeignKey("dbo.Customers", t => t.CustomerId)
-                .ForeignKey("dbo.ProductLists", t => t.ProductListId)
-                .Index(t => t.CustomerId)
-                .Index(t => t.ProductListId)
-                .Index(t => t.BrandId);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.Customers",
@@ -75,6 +70,70 @@ namespace Fotricle.Migrations
                         InitDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.FeedBacks",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Guid = c.String(),
+                        OrderId = c.Int(),
+                        CustomerId = c.Int(nullable: false),
+                        Food = c.String(maxLength: 50),
+                        Service = c.String(maxLength: 50),
+                        AllSuggest = c.String(maxLength: 50),
+                        CarSuggest = c.String(maxLength: 100),
+                        InitDate = c.DateTime(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Orders", t => t.OrderId)
+                .Index(t => t.OrderId);
+            
+            CreateTable(
+                "dbo.Orders",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        BrandId = c.Int(),
+                        CustomerId = c.Int(),
+                        OrderStatus = c.Int(nullable: false),
+                        OrderTime = c.DateTime(nullable: false),
+                        Payment = c.Int(nullable: false),
+                        OrderNumber = c.String(),
+                        MealNumber = c.Int(nullable: false),
+                        Amount = c.Int(nullable: false),
+                        LinepayVer = c.String(),
+                        Site = c.Int(nullable: false),
+                        CompleteTime = c.DateTime(),
+                        Remarks = c.String(maxLength: 100),
+                        Remark1 = c.String(maxLength: 100),
+                        Remark2 = c.String(maxLength: 100),
+                        Remark3 = c.String(maxLength: 100),
+                        Remark4 = c.String(maxLength: 100),
+                        InitDate = c.DateTime(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Brands", t => t.BrandId)
+                .Index(t => t.BrandId);
+            
+            CreateTable(
+                "dbo.OrderDetails",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        OrderId = c.Int(),
+                        ProductListId = c.Int(),
+                        ProductName = c.String(),
+                        ProductPrice = c.Int(nullable: false),
+                        ProductUnit = c.Int(nullable: false),
+                        Amount = c.Int(nullable: false),
+                        InitDate = c.DateTime(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Orders", t => t.OrderId)
+                .ForeignKey("dbo.ProductLists", t => t.ProductListId)
+                .Index(t => t.OrderId)
+                .Index(t => t.ProductListId);
             
             CreateTable(
                 "dbo.ProductLists",
@@ -98,54 +157,14 @@ namespace Fotricle.Migrations
                 .Index(t => t.BrandId);
             
             CreateTable(
-                "dbo.FeedBacks",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Guid = c.String(),
-                        OrderId = c.Int(),
-                        Food = c.String(maxLength: 50),
-                        Service = c.String(maxLength: 50),
-                        AllSuggest = c.String(maxLength: 50),
-                        CarSuggest = c.String(maxLength: 100),
-                        InitDate = c.DateTime(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Orders", t => t.OrderId)
-                .Index(t => t.OrderId);
-            
-            CreateTable(
-                "dbo.Orders",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        BrandId = c.Int(),
-                        CustomerId = c.Int(),
-                        OrderStatus = c.Int(nullable: false),
-                        OrderTime = c.DateTime(),
-                        Payment = c.Int(nullable: false),
-                        OrderNumber = c.String(),
-                        MealNumber = c.Int(nullable: false),
-                        Amount = c.Int(nullable: false),
-                        LinepayVer = c.String(),
-                        Site = c.Int(nullable: false),
-                        CompleteTime = c.DateTime(),
-                        Remarks = c.String(maxLength: 50),
-                        InitDate = c.DateTime(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Brands", t => t.BrandId)
-                .ForeignKey("dbo.Customers", t => t.CustomerId)
-                .Index(t => t.BrandId)
-                .Index(t => t.CustomerId);
-            
-            CreateTable(
                 "dbo.MyFollows",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         BrandId = c.Int(),
+                        BrandName = c.String(maxLength: 50),
                         CustomerId = c.Int(),
+                        InitDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Brands", t => t.BrandId)
@@ -177,9 +196,9 @@ namespace Fotricle.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         BrandId = c.Int(),
                         Date = c.String(),
-                        Status = c.Int(),
-                        SDateTime = c.DateTime(),
-                        EDateTimeDate = c.DateTime(),
+                        Status = c.Int(nullable: false),
+                        SDateTime = c.String(),
+                        EDateTimeDate = c.String(),
                         Location = c.String(maxLength: 50),
                         InitDate = c.DateTime(),
                     })
@@ -187,64 +206,37 @@ namespace Fotricle.Migrations
                 .ForeignKey("dbo.Brands", t => t.BrandId)
                 .Index(t => t.BrandId);
             
-            CreateTable(
-                "dbo.OrderDetails",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        OrderId = c.Int(),
-                        ProductListId = c.Int(),
-                        ProductName = c.String(),
-                        ProductPrice = c.Int(nullable: false),
-                        ProductUnit = c.Int(nullable: false),
-                        Amount = c.Int(nullable: false),
-                        InitDate = c.DateTime(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Orders", t => t.OrderId)
-                .ForeignKey("dbo.ProductLists", t => t.ProductListId)
-                .Index(t => t.OrderId)
-                .Index(t => t.ProductListId);
-            
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.OrderDetails", "ProductListId", "dbo.ProductLists");
-            DropForeignKey("dbo.OrderDetails", "OrderId", "dbo.Orders");
             DropForeignKey("dbo.OpenTimes", "BrandId", "dbo.Brands");
             DropForeignKey("dbo.Notices", "OrderId", "dbo.Orders");
             DropForeignKey("dbo.Notices", "CustomerId", "dbo.Customers");
             DropForeignKey("dbo.MyFollows", "CustomerId", "dbo.Customers");
             DropForeignKey("dbo.MyFollows", "BrandId", "dbo.Brands");
             DropForeignKey("dbo.FeedBacks", "OrderId", "dbo.Orders");
-            DropForeignKey("dbo.Orders", "CustomerId", "dbo.Customers");
-            DropForeignKey("dbo.Orders", "BrandId", "dbo.Brands");
-            DropForeignKey("dbo.Carts", "ProductListId", "dbo.ProductLists");
+            DropForeignKey("dbo.OrderDetails", "ProductListId", "dbo.ProductLists");
             DropForeignKey("dbo.ProductLists", "BrandId", "dbo.Brands");
-            DropForeignKey("dbo.Carts", "CustomerId", "dbo.Customers");
-            DropForeignKey("dbo.Carts", "BrandId", "dbo.Brands");
-            DropIndex("dbo.OrderDetails", new[] { "ProductListId" });
-            DropIndex("dbo.OrderDetails", new[] { "OrderId" });
+            DropForeignKey("dbo.OrderDetails", "OrderId", "dbo.Orders");
+            DropForeignKey("dbo.Orders", "BrandId", "dbo.Brands");
             DropIndex("dbo.OpenTimes", new[] { "BrandId" });
             DropIndex("dbo.Notices", new[] { "OrderId" });
             DropIndex("dbo.Notices", new[] { "CustomerId" });
             DropIndex("dbo.MyFollows", new[] { "CustomerId" });
             DropIndex("dbo.MyFollows", new[] { "BrandId" });
-            DropIndex("dbo.Orders", new[] { "CustomerId" });
+            DropIndex("dbo.ProductLists", new[] { "BrandId" });
+            DropIndex("dbo.OrderDetails", new[] { "ProductListId" });
+            DropIndex("dbo.OrderDetails", new[] { "OrderId" });
             DropIndex("dbo.Orders", new[] { "BrandId" });
             DropIndex("dbo.FeedBacks", new[] { "OrderId" });
-            DropIndex("dbo.ProductLists", new[] { "BrandId" });
-            DropIndex("dbo.Carts", new[] { "BrandId" });
-            DropIndex("dbo.Carts", new[] { "ProductListId" });
-            DropIndex("dbo.Carts", new[] { "CustomerId" });
-            DropTable("dbo.OrderDetails");
             DropTable("dbo.OpenTimes");
             DropTable("dbo.Notices");
             DropTable("dbo.MyFollows");
+            DropTable("dbo.ProductLists");
+            DropTable("dbo.OrderDetails");
             DropTable("dbo.Orders");
             DropTable("dbo.FeedBacks");
-            DropTable("dbo.ProductLists");
             DropTable("dbo.Customers");
             DropTable("dbo.Carts");
             DropTable("dbo.Brands");

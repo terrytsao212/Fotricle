@@ -40,10 +40,7 @@ namespace Fotricle.Models
 
         [Display(Name = "餐車電話")]
         [MaxLength(length: 50)]//最大長度為200
-        [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { set; get; }
-
-
 
         [Display(Name = "營業地址")]
         [MaxLength(length: 100)]//最大長度為200
@@ -71,8 +68,8 @@ namespace Fotricle.Models
 
         [Display(Name = "品牌FB")]
         [Required(ErrorMessage = "(0)必填")]//指定回饋報錯
-        [MaxLength(length: 50)]//最大長度為200
-        [DataType(DataType.Text)]
+        [MaxLength(length: 100)]//最大長度為200
+     
         public string FbAccount { set; get; }
 
         public Verification Verification { get; set; }

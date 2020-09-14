@@ -172,27 +172,16 @@
     <Compile Include="Controllers\CustomerOrdersController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MyFollowsController.cs" />
     <Compile Include="Controllers\OpenTimesController.cs" />
     <Compile Include="Controllers\ProductListsController.cs" />
     <Compile Include="Controllers\ValueController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202009070659285_addFotricle.cs" />
-    <Compile Include="Migrations\202009070659285_addFotricle.Designer.cs">
-      <DependentUpon>202009070659285_addFotricle.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202009080309594_EditCart.cs" />
-    <Compile Include="Migrations\202009080309594_EditCart.Designer.cs">
-      <DependentUpon>202009080309594_EditCart.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202009080311492_editorder.cs" />
-    <Compile Include="Migrations\202009080311492_editorder.Designer.cs">
-      <DependentUpon>202009080311492_editorder.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202009110434477_changeopentime.cs" />
-    <Compile Include="Migrations\202009110434477_changeopentime.Designer.cs">
-      <DependentUpon>202009110434477_changeopentime.cs</DependentUpon>
+    <Compile Include="Migrations\202009140721304_addFotricle.cs" />
+    <Compile Include="Migrations\202009140721304_addFotricle.Designer.cs">
+      <DependentUpon>202009140721304_addFotricle.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -211,6 +200,7 @@
     <Compile Include="Models\Utility.cs" />
     <Compile Include="Models\ViewBrandOrder.cs" />
     <Compile Include="Models\ViewCart.cs" />
+    <Compile Include="Models\ViewMyfollow.cs" />
     <Compile Include="Models\ViewOrder.cs" />
     <Compile Include="Models\ViewOrderStatus.cs" />
     <Compile Include="Models\ViewProductBool.cs" />
@@ -310,17 +300,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202009070659285_addFotricle.resx">
-      <DependentUpon>202009070659285_addFotricle.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202009080309594_EditCart.resx">
-      <DependentUpon>202009080309594_EditCart.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202009080311492_editorder.resx">
-      <DependentUpon>202009080311492_editorder.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202009110434477_changeopentime.resx">
-      <DependentUpon>202009110434477_changeopentime.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202009140721304_addFotricle.resx">
+      <DependentUpon>202009140721304_addFotricle.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -30,5 +30,9 @@ namespace Fotricle.Models
         [Display(Name = "客戶編號")]
         public virtual Customer Customer { set; get; }//virtual的意思是虛擬的
 
+        [Display(Name = "建立時間")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime? InitDate { set; get; }//"?"為允許空值，日期數字才可使用問號
+
     }
 }

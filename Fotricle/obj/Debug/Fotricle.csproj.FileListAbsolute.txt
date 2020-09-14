@@ -99,12 +99,7 @@ C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.csproj.CopyComplete
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.dll
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.pdb
-C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.addFotricle.resources
-C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.csproj.GenerateResource.cache
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.csprojAssemblyReference.cache
-C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.EditCart.resources
-C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.editorder.resources
-C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.changeopentime.resources
 C:\Users\admin\Desktop\Fotricle_20200912\Fotricle\Fotricle\bin\Fotricle.dll.config
 C:\Users\admin\Desktop\Fotricle_20200912\Fotricle\Fotricle\bin\Fotricle.dll
 C:\Users\admin\Desktop\Fotricle_20200912\Fotricle\Fotricle\bin\Fotricle.pdb
@@ -212,3 +207,5 @@ C:\Users\admin\Desktop\Fotricle_20200912\Fotricle\Fotricle\obj\Debug\Fotricle.cs
 C:\Users\admin\Desktop\Fotricle_20200912\Fotricle\Fotricle\obj\Debug\Fotricle.csproj.CopyComplete
 C:\Users\admin\Desktop\Fotricle_20200912\Fotricle\Fotricle\obj\Debug\Fotricle.dll
 C:\Users\admin\Desktop\Fotricle_20200912\Fotricle\Fotricle\obj\Debug\Fotricle.pdb
+C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.addFotricle.resources
+C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.csproj.GenerateResource.cache

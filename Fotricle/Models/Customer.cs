@@ -35,7 +35,6 @@ namespace Fotricle.Models
         public string PasswordSalt { set; get; }
 
         [Display(Name = "客戶電話")]
-        [DataType(DataType.Text)]
         public string CusPhone { set; get; }
 
         public GenderType Gender { get; set; }

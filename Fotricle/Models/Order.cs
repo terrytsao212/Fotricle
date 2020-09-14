@@ -20,16 +20,14 @@ namespace Fotricle.Models
         [Display(Name = "品牌編號")]
         public virtual Brand Brand { set; get; }
 
-        public int? CustomerId { get; set; }
 
-        [ForeignKey("CustomerId")]
         [Display(Name = "客戶編號")]
-        public virtual Customer Customer { set; get; }//virtual的意思是虛擬的
+        public int? CustomerId  { set; get; }//virtual的意思是虛擬的
 
         public OrderStatus OrderStatus { get; set; }
 
         [Display(Name = "訂單日期")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime OrderTime { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         public PaymentMethod Payment { get; set; }
@@ -39,7 +37,7 @@ namespace Fotricle.Models
         public string OrderNumber { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         [Display(Name = "取餐單號")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int MealNumber { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         [Display(Name = "總金額")]
@@ -55,21 +53,25 @@ namespace Fotricle.Models
         [Display(Name = "訂單完成時間")]
         public DateTime? CompleteTime { set; get; }//"?"為允許空值，日期數字才可使用問號
 
+        [Display(Name = "備註")]
+        [MaxLength(length: 100)]//指定後面nvchar為50
+        public string Remarks { set; get; }
+
         [Display(Name = "備註1")]
-        [MaxLength(length: 50)]//指定後面nvchar為50
-        public string Remarks1 { set; get; }
+        [MaxLength(length: 100)]//指定後面nvchar為50
+        public string Remark1 { set; get; }
 
         [Display(Name = "備註2")]
-        [MaxLength(length: 50)]//指定後面nvchar為50
-        public string Remarks2 { set; get; }
+        [MaxLength(length: 100)]//指定後面nvchar為50
+        public string Remark2 { set; get; }
 
         [Display(Name = "備註3")]
-        [MaxLength(length: 50)]//指定後面nvchar為50
-        public string Remarks3 { set; get; }
+        [MaxLength(length: 100)]//指定後面nvchar為50
+        public string Remark3 { set; get; }
 
         [Display(Name = "備註4")]
-        [MaxLength(length: 50)]//指定後面nvchar為50
-        public string Remarks4 { set; get; }
+        [MaxLength(length: 100)]//指定後面nvchar為50
+        public string Remark4 { set; get; }
 
 
         [Display(Name = "建立時間")]

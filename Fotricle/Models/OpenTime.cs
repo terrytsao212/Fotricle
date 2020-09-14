@@ -23,7 +23,7 @@ namespace Fotricle.Models
         [Display(Name = "日期")]
         public string Date { set; get; }//"?"為允許空值，日期數字才可使用問號
 
-        public OpenOrNot? Status { get; set; }
+        public OpenOrNot Status { get; set; }
 
         [Display(Name = "營業時間起")]
         public string SDateTime { set; get; }

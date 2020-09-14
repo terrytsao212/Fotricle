@@ -37,5 +37,11 @@ namespace Fotricle.Models
         [Display(Name = "審核業主帳號")]
         public Verification Verification { set; get; }
 
+        [Display(Name = "品牌FB")]
+        [Required(ErrorMessage = "(0)必填")]//指定回饋報錯
+        [MaxLength(length: 100)]//最大長度為200
+
+        public string FbAccount { set; get; }
+
     }
 }

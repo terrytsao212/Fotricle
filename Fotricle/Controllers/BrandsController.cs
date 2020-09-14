@@ -13,6 +13,7 @@ using System.Web.Http.Description;
 using System.Web.Mvc;
 using Fotricle.Models;
 using Fotricle.Security;
+using Microsoft.Ajax.Utilities;
 
 
 namespace Fotricle.Controllers
@@ -42,8 +43,13 @@ namespace Fotricle.Controllers
                 });
             }
 
+            
+
             brand.PasswordSalt = Utility.CreateSalt();//建立鹽
             brand.Password = Utility.GenerateHashWithSalt(brand.Password, brand.PasswordSalt);//密碼+鹽後加密
+
+            var FbAccount = db.Brands.FirstOrDefault(b => b.FbAccount == brand.FbAccount);
+
 
             db.Brands.Add(brand);
             db.SaveChanges();
@@ -118,7 +124,7 @@ namespace Fotricle.Controllers
         [System.Web.Http.HttpPatch]
         [JwtAuthFilter]
         [System.Web.Http.Route("Brand/Edit")]
-        public IHttpActionResult EditBrands(string id, [Bind(Include = "Id,BrandName,BrandStory,PhoneNumber,Sort,LinePay,CarImage,LogoPhoto,OrCode")] ViewBrand viewBrand)
+        public IHttpActionResult EditBrands(string id, [Bind(Include = "Id,BrandName,BrandStory,PhoneNumber,Sort,LinePay,CarImage,LogoPhoto,OrCode,FbAccount")] ViewBrand viewBrand)
         {
             if (!ModelState.IsValid)
             {
@@ -136,6 +142,8 @@ namespace Fotricle.Controllers
             brand.CarImage = viewBrand.CarImage;
             brand.LogoPhoto = viewBrand.LogoPhoto;
             brand.QrCode = viewBrand.QrCode;
+            brand.FbAccount = viewBrand.FbAccount;
+          
 
 
             db.Entry(brand).State = EntityState.Modified;
