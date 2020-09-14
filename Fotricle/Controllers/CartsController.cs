@@ -57,6 +57,7 @@ namespace Fotricle.Controllers
                 {
                     CustomerId = id,
                     BrandId = Brand.Id,
+                    BrandName = Brand.BrandName,
                     ProductListId = viewCart.ProductListId,
                     ProductName = Product.ProductName,
                     ProductPhoto = Product.ProductPhoto,
@@ -81,6 +82,7 @@ namespace Fotricle.Controllers
                         cart.Id,
                         cart.CustomerId,
                         cart.BrandId,
+                        cart.BrandName,
                         ProductList = new
                         {
                             cart.ProductListId,
@@ -131,11 +133,7 @@ namespace Fotricle.Controllers
 
 
             db.Carts.RemoveRange(carts);
-            // db.Carts.AddRange()
-            //foreach (var c in carts)
-            //{
-            //    db.Carts.Remove(c);
-            //}
+            
             db.SaveChanges();
 
             return Ok(new
@@ -185,7 +183,7 @@ namespace Fotricle.Controllers
         [System.Web.Http.HttpPatch]
         [JwtAuthFilter]
         [System.Web.Http.Route("cart/Edit")]
-        public IHttpActionResult EditCart(string id, [Bind(Include = "Id,ProductUnit,Amount")] ViewCart viewCart)
+        public IHttpActionResult EditCart(string id, [Bind(Include = "Id,ProductUnit")] ViewCart viewCart)
         {
             if (!ModelState.IsValid)
             {
@@ -195,7 +193,8 @@ namespace Fotricle.Controllers
             int id_temp = Convert.ToInt32(id);
             cart = db.Carts.Where(c => c.Id == id_temp).FirstOrDefault();
             cart.ProductUnit = viewCart.ProductUnit;
-            cart.Amount = viewCart.Amount;
+            cart.Amount = viewCart.ProductUnit * cart.ProductPrice;
+            //cart.Amount = viewCart.Amount;
 
             db.Entry(cart).State = EntityState.Modified;
             db.SaveChanges();
@@ -210,26 +209,13 @@ namespace Fotricle.Controllers
 
 
 
-
         // GET: api/Carts
         public IQueryable<Cart> GetCarts()
         {
             return db.Carts;
         }
 
-        // GET: api/Carts/5
-        //[ResponseType(typeof(Cart))]
-        //public IHttpActionResult GetCart(int id)
-        //{
-        //    Cart cart = db.Carts.Find(id);
-        //    if (cart == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(cart);
-        //}
-
+        
         // PUT: api/Carts/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutCart(int id, Cart cart)
@@ -280,22 +266,7 @@ namespace Fotricle.Controllers
             return CreatedAtRoute("DefaultApi", new { id = cart.Id }, cart);
         }
 
-        //// DELETE: api/Carts/5
-        //[ResponseType(typeof(Cart))]
-        //public IHttpActionResult DeleteCart(int id)
-        //{
-        //    Cart cart = db.Carts.Find(id);
-        //    if (cart == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    db.Carts.Remove(cart);
-        //    db.SaveChanges();
-
-        //    return Ok(cart);
-        //}
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
