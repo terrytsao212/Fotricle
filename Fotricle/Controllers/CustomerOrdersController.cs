@@ -45,7 +45,15 @@ namespace Fotricle.Controllers
                     message = "購物車內無商品!"
                 });
             }
-           
+            else if (carts.Where(x => x.CustomerId == id).GroupBy(x => x.BrandId).Count() > 1)
+            {
+                return Ok(new
+                {
+                    result = false,
+                    message = "購物車內不能有2家商品!"
+                });
+            }
+
 
             SqlConnection Conn = new SqlConnection();
             Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
@@ -140,10 +148,9 @@ namespace Fotricle.Controllers
             {
                 success = true,
                 result
-                //
+                
             });
         }
-
 
 
         //更新訂單狀態
@@ -170,6 +177,8 @@ namespace Fotricle.Controllers
             order.Remark2 = viewOrderStatus.Remark2;
             order.Remark3 = viewOrderStatus.Remark3;
             order.Remark4 = viewOrderStatus.Remark4;
+            order.CompleteTime = viewOrderStatus.CompleteTime;
+
             db.SaveChanges();
             return Ok(new
             {
