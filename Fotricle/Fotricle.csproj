@@ -209,6 +209,7 @@
     <Compile Include="Models\ViewLogin.cs" />
     <Compile Include="Models\ViewOpenT.cs" />
     <Compile Include="Models\ViewProducts.cs" />
+    <Compile Include="Models\ViewSaleData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\JwtAuthFilter.cs" />
     <Compile Include="Security\JwtAuthUtil.cs" />
