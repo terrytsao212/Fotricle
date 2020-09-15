@@ -49,6 +49,7 @@ namespace Fotricle.Models
         public string LinepayVer { set; get; }
 
 
+
         [Display(Name = "是否為現場單")]
         public Site Site { get; set; }
 

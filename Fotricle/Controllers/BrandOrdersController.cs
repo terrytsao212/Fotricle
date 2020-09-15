@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
@@ -164,5 +165,34 @@ namespace Fotricle.Controllers
         {
             return db.Orders.Count(e => e.Id == id) > 0;
         }
+
+        //總銷售分析
+        [HttpGet]
+        [JwtAuthFilter]
+        [Route("OrderSale/Get")]
+        public IHttpActionResult GetOrderSale()
+        {
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            var sales = db.Orders.Sum(c => c.Id);
+            var amount = db.Orders.Select(c => c.Amount).Sum();
+            var orderTime = db.Orders.Select(c => c.OrderTime).FirstOrDefault();
+            //var openTime = db.OpenTimes.Where(c => EntityFunctions.DiffDays(c.EDateTimeDate, c.SDateTime) > 1).ToList();
+
+            return Ok(new
+            {
+                sales,
+                amount,
+                orderTime,
+                //openTime
+            });
+        }
+        
+
+
+
+
+
     }
 }
