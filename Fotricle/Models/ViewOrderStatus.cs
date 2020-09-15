@@ -15,7 +15,7 @@ namespace Fotricle.Models
         public string Remark3 { get; set; }
         public string Remark4 { get; set; }
 
-
+        public DateTime? CompleteTime { get; set; }
 
     }
 }
