@@ -131,27 +131,33 @@ namespace Fotricle.Controllers
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-            List<Order> orders = db.Orders.ToList();
+            List<Order> orders = db.Orders.Where(o => o.CustomerId == id && o.OrderTime > DateTime.Today).ToList();
             List<OrderDetail> orderDetails = db.OrderDetails.ToList();
             List<Brand> brands = db.Brands.ToList();
+            var today = orders.Select(x => new
+            {
+                x.Id,
+                status = x.OrderStatus.ToString(),
+                x.OrderNumber,
+                brandName = x.Brand.BrandName,
+                x.LinepayVer,
+                x.Remarks,
+                x.Remark1,
+                x.Remark2,
+                x.Remark3,
+                x.Remark4,
+                Total = x.OrderDetails.Sum(o => o.Amount),
+                x.OrderDetails
 
-
-            var result = from o in orders
-                join od in orderDetails on o.Id equals od.OrderId
-                join bd in brands on o.BrandId equals bd.Id
-                where o.CustomerId == id
-                select new { o.Id, o.OrderTime, o.BrandId, bd.BrandName, Status = o.OrderStatus.ToString(), od.ProductName, od.ProductUnit, od.Amount };
-
-
+            }).ToList();
 
             return Ok(new
             {
                 success = true,
-                result
-                
+                today,
             });
         }
-
+        
 
         //更新訂單狀態
         [HttpPatch]

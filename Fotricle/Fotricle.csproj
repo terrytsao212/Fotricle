@@ -199,6 +199,7 @@
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\ProductList.cs" />
     <Compile Include="Models\Utility.cs" />
+    <Compile Include="Models\ViewBrandCart.cs" />
     <Compile Include="Models\ViewBrandOrder.cs" />
     <Compile Include="Models\ViewCart.cs" />
     <Compile Include="Models\ViewFeedBack.cs" />

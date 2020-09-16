@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Policy;
 using System.Web;
 
 namespace Fotricle.Models
@@ -28,6 +29,7 @@ namespace Fotricle.Models
 
         [Display(Name = "訂單日期")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        //[DisplayFormat(ApplyFormatInEditMode = true,DataFormatString = "{0:d}")]
         public DateTime OrderTime { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         public PaymentMethod Payment { get; set; }

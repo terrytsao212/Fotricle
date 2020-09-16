@@ -29,6 +29,7 @@ namespace Fotricle.Controllers
             var myfollow = db.MyFollows.Where(m => m.CustomerId == id)
                .Select(m => new
                {
+                   m.Id,
                    m.CustomerId,
                    m.BrandId,
                    m.BrandName

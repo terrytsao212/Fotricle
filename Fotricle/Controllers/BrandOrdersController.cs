@@ -13,6 +13,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Fotricle.Models;
 using Fotricle.Security;
+using WebGrease.Css.Extensions;
 
 namespace Fotricle.Controllers
 {
@@ -41,6 +42,7 @@ namespace Fotricle.Controllers
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             List<Brand> brands = db.Brands.Where(x => x.Id == id).ToList();
             List<Order> orders = db.Orders.Where(x => x.BrandId == id).ToList();
+            List<Cart> carts = db.Carts.Where(x => x.CustomerId == id).ToList();
             SqlConnection Conn = new SqlConnection();
             Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
             DataTable dt = new DataTable();
@@ -51,10 +53,10 @@ namespace Fotricle.Controllers
             cmd.Parameters["@BrandId"].Value = brands.Select(x => x.Id).FirstOrDefault();
 
             cmd.Parameters.Add("@CustomerId", SqlDbType.Int);
-            cmd.Parameters["@CustomerId"].Value =2;
+            cmd.Parameters["@CustomerId"].Value = 99;
 
             cmd.Parameters.Add("@Payment", SqlDbType.Int);
-            cmd.Parameters["@Payment"].Value = viewBrandOrder.Payment;
+            cmd.Parameters["@Payment"].Value = 1;
 
             cmd.Parameters.Add("@OrderNumber", SqlDbType.NVarChar);
             cmd.Parameters["@OrderNumber"].Value = viewBrandOrder.OrderNumber;
@@ -63,36 +65,43 @@ namespace Fotricle.Controllers
             cmd.Parameters["@Amount"].Value = viewBrandOrder.Amount;
 
             cmd.Parameters.Add("@LinepayVer", SqlDbType.NVarChar);
-            cmd.Parameters["@LinepayVer"].Value = viewBrandOrder.LinepayVer;
+            cmd.Parameters["@LinepayVer"].Value = "V9999";
 
             cmd.Parameters.Add("@Site", SqlDbType.Int);
-            cmd.Parameters["@Site"].Value = viewBrandOrder.Site;
+            cmd.Parameters["@Site"].Value = 1;
 
             cmd.Parameters.Add("@Remarks", SqlDbType.NVarChar);
             cmd.Parameters["@Remarks"].Value = viewBrandOrder.Remarks is null ? "" : viewBrandOrder.Remarks;
 
             SqlParameter OId = cmd.Parameters.Add("@Id", SqlDbType.Int);
             OId.Direction = ParameterDirection.Output;
+
             Conn.Open();
             cmd.ExecuteNonQuery();
             Conn.Close();
 
-            foreach (var order in orders)
+            foreach (var cart in carts)
             {
                 OrderDetail orderDetail = new OrderDetail
                 {
                     OrderId = Convert.ToInt32(OId.Value),
-                    ProductListId = viewBrandOrder.ProductListId,
+                    ProductListId = cart.ProductListId,
                     //ProductListId =db.ProductLists.Where(c=>c.Id==viewBrandOrder.ProductListId)
-                    ProductName = viewBrandOrder.ProductName,
-                    ProductPrice = viewBrandOrder.Price,
-                    ProductUnit = viewBrandOrder.ProductUnit,
-                    Amount = viewBrandOrder.Amount
+                    ProductName = cart.ProductName,
+                    ProductPrice = cart.ProductPrice,
+                    ProductUnit = cart.ProductUnit,
+                    Amount = cart.Amount
                 };
 
                 db.OrderDetails.Add(orderDetail);
-
+                //var orderssList = db.Orders.Where(x => x.Id == orderDetail.Id).ToList();
             }
+            if (carts.Any())
+            {
+                db.Carts.RemoveRange(carts);
+            }
+
+
             db.SaveChanges();
             return Ok(new
             {
@@ -101,47 +110,126 @@ namespace Fotricle.Controllers
             });
 
         }
-
-
-
-
-
-
-
-
-
-
-        //拿餐車pos的訂單
+        //拿餐車現場的取餐單號
         [HttpGet]
         //[JwtAuthFilter]
-        [Route("BrandOrder/Get")]
+        [Route("BrandOrder/GetMeal")]
         public IHttpActionResult GetBrandOrder(int id)
         {
-            Brand brand = db.Brands.Find(id);
-            var order = db.Orders.Where(c => c.Id == id).Select(c => new
+            //string token = Request.Headers.Authorization.Parameter;
+            //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            List<Order> orders = db.Orders.Where(o => o.BrandId == id && o.OrderTime > DateTime.Today).ToList();
+            List<OrderDetail> orderDetails = db.OrderDetails.ToList();
+            List<Brand> brands = db.Brands.ToList();
+            var today = orders.Select(x => new
             {
-                c.Id,
-                c.BrandId,
-                c.CustomerId,
-                c.OrderNumber,
-                c.CompleteTime,
-                c.Amount,
-                c.LinepayVer,
-                c.MealNumber,
-                c.Payment,
-                c.Remark1,
-                c.Remark2,
-                c.Remark3,
-                c.Remark4,
-                status = c.OrderStatus.ToString(),
-                site = c.Site == Site.非現場 ? false : true,
-                c.OrderTime,
-                c.OrderDetails
+                x.MealNumber
+                //x.LinepayVer,
+                //Total = x.OrderDetails.Sum(o => o.Amount),
+                //x.OrderDetails
+            }).ToList();
 
-
+            return Ok(new
+            {
+                success = true,
+                today,
             });
-            return Ok(order);
         }
+
+
+
+
+        //拿餐車現場的訂單
+        [HttpGet]
+        [JwtAuthFilter]
+        [Route("BrandOrder/Get")]
+        public IHttpActionResult GetBrandOrder()
+        {
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            List<Order> orders = db.Orders.Where(o=>o.BrandId==id&&o.OrderTime>DateTime.Today).ToList();
+            List<OrderDetail> orderDetails = db.OrderDetails.ToList();
+            List<Brand> brands = db.Brands.ToList();
+            var today = orders.Select(x => new
+            {
+                x.Id,
+                status = x.OrderStatus.ToString(),
+                x.OrderNumber,
+                brandName=x.Brand.BrandName,
+                x.LinepayVer,
+                Total = x.OrderDetails.Sum(o => o.Amount),
+                x.OrderDetails
+            }).ToList();
+
+            return Ok(new
+            {
+                success = true,
+                today,
+            });
+        }
+
+
+        //SqlConnection Conn = new SqlConnection();
+        //Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
+        //DataTable dt = new DataTable();
+        //SqlCommand cmd = new SqlCommand(@"select Id orderID,convert(varchar, o.OrderTime, 112) orderdate,sum(o.Amount) 營業額
+        //from orders o
+        //where convert(varchar, OrderTime, 112) = convert(varchar, getdate(), 112)
+        // group by Id,BrandId,convert(varchar, OrderTime, 112)", Conn);
+        //SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+        //adapter.Fill(dt);
+
+
+        //var result = from o in orders
+        //             join od in orderDetails on o.Id equals od.OrderId
+        //             join bd in brands on o.BrandId equals bd.Id
+        //             //where o.CustomerId
+        //             select new
+        //             {
+        //                 o.Id,
+        //                 o.LinepayVer,
+        //                 OrderTime = o.OrderTime.ToString("yyyy-MM-dd"),
+        //                 o.BrandId,
+        //                 bd.BrandName,
+        //                 o.MealNumber,
+        //                 Status = o.OrderStatus.ToString(),
+        //                 o.Payment,
+        //                 od.ProductName,
+        //                 od.ProductUnit,
+        //                 od.Amount,
+        //                 od.ProductPrice
+
+        //             };
+        //string nowDateTime = DateTime.Now.ToString("yyyy-MM-dd");
+
+        //string nowDateTime = DateTime.Now.ToString("yyyy-MM-dd");
+        //var order = orders.Select(x => new
+        //{
+        //    x.Id,
+        //BrandName = x.Brand.BrandName,
+        //time = x.OrderTime.Date.ToString("yyyy-MM-dd"),
+        //    x.Amount
+        //}).GroupBy(x =>x.Id ).Select(x => new
+        //{
+
+        //BrandName = x.Key,
+        //Time = x.GroupBy(y => y.time).Select(y => new
+        //{
+        //    Ordertime = y.Key,
+        //    total = y.Sum(a => a.Amount),
+        //})
+        //});
+        //var order=orders.Select(x=>new
+        //{
+
+        //})
+
+        //dt
+
+
+
         //string token = Request.Headers.Authorization.Parameter;
         //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
         //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
@@ -224,7 +312,7 @@ namespace Fotricle.Controllers
             db.Orders.Add(order);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new {id = order.Id}, order);
+            return CreatedAtRoute("DefaultApi", new { id = order.Id }, order);
         }
 
         // DELETE: api/BrandOrders/5
@@ -268,20 +356,27 @@ namespace Fotricle.Controllers
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-            var sales = db.Orders.Sum(c => c.Id);
+            var sales = db.Orders.Select(c => c.Id).Count();
             var amount = db.Orders.Select(c => c.Amount).Sum();
-            var orderTime = db.Orders.Select(c => c.OrderTime).FirstOrDefault();
+            var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
+            {
+                x.OrderTime,
+            });
+
+
             //var openTime = db.OpenTimes.Where(c => EntityFunctions.DiffDays(c.EDateTimeDate, c.SDateTime) > 1).ToList();
 
             return Ok(new
             {
                 sales,
                 amount,
-                orderTime,
-                //openTime
+                orderTime
+
+                //orderTime
+
             });
         }
-        
+
 
 
 

@@ -133,7 +133,7 @@ namespace Fotricle.Controllers
 
 
             db.Carts.RemoveRange(carts);
-            
+
             db.SaveChanges();
 
             return Ok(new
@@ -209,13 +209,204 @@ namespace Fotricle.Controllers
 
 
 
+
+        //新增現場單購物車
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("BrandCart/add")]
+        [JwtAuthFilter]
+        public IHttpActionResult BrandPostCart(ViewBrandCart viewBrandCart)
+        {
+            var Product = db.ProductLists.Find(viewBrandCart.ProductListId);
+            if (Product == null)
+            {
+                return NotFound();
+            }
+
+            //顧客資料
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+
+            //bool isCart = db.Carts
+            //    .Where(c => c.BrandId== id)
+            //    .Any(c => c.ProductListId == viewBrandCart.ProductListId);
+
+            //if (isCart) //購物車有相同的商品
+            //{
+            //    Cart cart = db.Carts.First(c => c.CustomerId == id && c.ProductListId == viewBrandCart.ProductListId);
+            //    cart.ProductUnit += 1;
+            //    cart.Amount = cart.ProductPrice * cart.ProductUnit;
+            //}
+            //else
+            //{
+            //餐車業主
+            var Brand = db.Brands.FirstOrDefault(b => b.Id == Product.BrandId);
+
+
+            db.Carts.Add(new Cart
+            {
+                CustomerId = 1,
+                BrandId = id,
+                BrandName = Brand.BrandName,
+                ProductListId = viewBrandCart.ProductListId,
+                ProductName = Product.ProductName,
+                ProductPrice = Product.Price,
+                ProductUnit = viewBrandCart.ProductUnit,
+                Amount = Product.Price * viewBrandCart.ProductUnit,
+
+            });
+
+            //}
+
+            db.SaveChanges();
+
+            return Ok(new
+            {
+                result = true,
+                message = "已加入購物車",
+                carts = db.Carts
+                    .Where(cart => cart.CustomerId == id)
+                    .Select(cart => new
+                    {
+                        cart.Id,
+                        cart.CustomerId,
+                        cart.BrandId,
+                        cart.BrandName,
+                        ProductList = new
+                        {
+                            cart.ProductListId,
+                            cart.ProductName,
+                            cart.ProductUnit,
+                            cart.ProductPrice,
+                            cart.Amount,
+                            
+                        }
+                    })
+            });
+        }
+
+        // 刪除現場單購物車
+       
+        [System.Web.Http.Route("BrandCart/{Id}")]
+        [JwtAuthFilter]
+        public IHttpActionResult BrandDeleteCart(int id)
+        {
+            Cart cart = db.Carts.Find(id);
+            if (cart == null)
+            {
+                return NotFound();
+            }
+
+            db.Carts.Remove(cart);
+            db.SaveChanges();
+
+            return Ok(cart);
+        }
+
+        // 清空現場單購物車
+        [System.Web.Http.Route("BrandCart/ALL")]
+        [JwtAuthFilter]
+
+
+        public IHttpActionResult BrandDeleteCartAll()
+        {
+
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+
+
+            // Cart cart = db.Carts.Find(id);
+            var carts = db.Carts.Where(c => c.CustomerId == id);
+
+
+            db.Carts.RemoveRange(carts);
+
+            db.SaveChanges();
+
+            return Ok(new
+            {
+                result = true,
+                message = "已清空購物車"
+            });
+        }
+
+        //Get顧客現場購物車資料
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("BrandCart/customer/{cartId}")]
+        [JwtAuthFilter]
+
+        public IHttpActionResult BrandGetCart(int cartId)
+        {
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+
+
+            var carts = db.Carts.Where(cart => cart.CustomerId == id)
+                .Select(cart => new
+                {
+                    cart.Id,
+                    cart.CustomerId,
+                    cart.BrandId,
+                    cart.BrandName,
+                    ProductList = new
+                    {
+                        cart.ProductListId,
+                        cart.ProductName,
+                        cart.ProductUnit,
+                        cart.Amount
+                    }
+                });
+            return Ok(new
+            {
+                result = true,
+                carts
+            });
+
+
+        }
+
+        //修改現場購物車資料(cart流水Id)
+        [System.Web.Http.HttpPatch]
+        [JwtAuthFilter]
+        [System.Web.Http.Route("BrandCart/Edit")]
+        public IHttpActionResult BrandEditCart(string id, [Bind(Include = "Id,ProductUnit")] ViewBrandCart viewBrandCart)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Cart cart = new Cart();
+            int id_temp = Convert.ToInt32(id);
+            cart = db.Carts.Where(c => c.Id == id_temp).FirstOrDefault();
+            cart.ProductUnit = viewBrandCart.ProductUnit;
+            cart.Amount = viewBrandCart.ProductUnit * cart.ProductPrice;
+            //cart.Amount = viewCart.Amount;
+
+            db.Entry(cart).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Ok(new
+            {
+                result = true,
+                message = "購物車更新成功"
+            });
+
+        }
+
+
+
+
+
+
         // GET: api/Carts
         public IQueryable<Cart> GetCarts()
         {
             return db.Carts;
         }
 
-        
+
         // PUT: api/Carts/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutCart(int id, Cart cart)
@@ -266,7 +457,7 @@ namespace Fotricle.Controllers
             return CreatedAtRoute("DefaultApi", new { id = cart.Id }, cart);
         }
 
-        
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

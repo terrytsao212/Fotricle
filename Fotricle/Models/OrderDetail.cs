@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace Fotricle.Models
 {
@@ -18,6 +19,7 @@ namespace Fotricle.Models
 
         [ForeignKey("OrderId")]
         [Display(Name = "訂單編號")]
+        [JsonIgnore]
         public virtual Order Order { set; get; }//virtual的意思是虛擬的
 
 
