@@ -125,12 +125,15 @@ namespace Fotricle.Controllers
 
 
         //Get顧客訂單資料
+        [HttpGet]
+        //[JwtAuthFilter]
         [Route("customer/orders")]
-        public IHttpActionResult GetCustomerOrders()
+       
+        public IHttpActionResult GetCustomerOrders(int id)
         {
-            string token = Request.Headers.Authorization.Parameter;
-            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
-            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            //string token = Request.Headers.Authorization.Parameter;
+            //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             List<Order> orders = db.Orders.Where(o => o.CustomerId == id && o.OrderTime > DateTime.Today).ToList();
             List<OrderDetail> orderDetails = db.OrderDetails.ToList();
             List<Brand> brands = db.Brands.ToList();
