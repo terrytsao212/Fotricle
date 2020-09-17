@@ -80,7 +80,10 @@ namespace Fotricle.Controllers
             cmd.Parameters["@LinepayVer"].Value = viewOrder.LinepayVer;
 
             cmd.Parameters.Add("@Site", SqlDbType.Int);
-            cmd.Parameters["@Site"].Value = viewOrder.Site;
+            cmd.Parameters["@Site"].Value = 0;
+
+            cmd.Parameters.Add("@OrderStatus", SqlDbType.Int);
+            cmd.Parameters["@OrderStatus"].Value = 0;
 
             cmd.Parameters.Add("@Remarks", SqlDbType.NVarChar);
             cmd.Parameters["@Remarks"].Value = viewOrder.Remarks is null ? "" : viewOrder.Remarks;

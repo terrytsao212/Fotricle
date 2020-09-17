@@ -65,10 +65,13 @@ namespace Fotricle.Controllers
             cmd.Parameters["@Amount"].Value = viewBrandOrder.Amount;
 
             cmd.Parameters.Add("@LinepayVer", SqlDbType.NVarChar);
-            cmd.Parameters["@LinepayVer"].Value = "V9999";
+            cmd.Parameters["@LinepayVer"].Value = "現金";
 
             cmd.Parameters.Add("@Site", SqlDbType.Int);
             cmd.Parameters["@Site"].Value = 1;
+
+            cmd.Parameters.Add("@OrderStatus", SqlDbType.Int);
+            cmd.Parameters["@OrderStatus"].Value = 1;
 
             cmd.Parameters.Add("@Remarks", SqlDbType.NVarChar);
             cmd.Parameters["@Remarks"].Value = viewBrandOrder.Remarks is null ? "" : viewBrandOrder.Remarks;
@@ -160,6 +163,7 @@ namespace Fotricle.Controllers
                 brandName=x.Brand.BrandName,
                 x.LinepayVer,
                 Total = x.OrderDetails.Sum(o => o.Amount),
+                Site=x.Site.ToString(),
                 x.OrderDetails
             }).ToList();
 
@@ -356,32 +360,48 @@ namespace Fotricle.Controllers
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-            var sales = db.Orders.Select(c => c.Id).Count();
-            var amount = db.Orders.Select(c => c.Amount).Sum();
-            var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
-            {
-                x.OrderTime,
-            });
+            //var sales = db.Orders.Select(c => c.Id).Count();
+            //var amount = db.Orders.Select(c => c.Amount).Sum();
+            //var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
+            //{
+            //    x.OrderTime,
+            //});
+            SqlConnection Conn = new SqlConnection();
+            Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
+            DataTable dt = new DataTable();
+            string query =
+                "select x.orderdate,x.ordernums,x.orderamount,workhours from (select count(o.Id) ordernums," +
+                "convert(varchar, o.OrderTime, 112) orderdate,sum(o.Amount) orderamount,BrandId from orders o group by BrandId," +
+                "convert(varchar, OrderTime, 112))x left join (select Date,DATEDIFF(HOUR, SDateTime, EDateTimeDate) workhours,BrandId from OpenTimes)y " +
+                "on right(convert(varchar, x.orderdate, 112),4)=y.Date where x.BrandId=@id";
+            SqlCommand cmd = new SqlCommand(query, Conn);
 
 
-            //var openTime = db.OpenTimes.Where(c => EntityFunctions.DiffDays(c.EDateTimeDate, c.SDateTime) > 1).ToList();
+            cmd.Parameters.AddWithValue("@id", id);
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            adapter.Fill(dt);
 
             return Ok(new
             {
-                sales,
-                amount,
-                orderTime
-
-                //orderTime
-
+                result = true,
+                //opentime,
+                //order
+                數據分析 = dt
             });
         }
 
 
+            //var openTime = db.OpenTimes.Where(c => EntityFunctions.DiffDays(c.EDateTimeDate, c.SDateTime) > 1).ToList();
 
+            //return Ok(new
+            //{
+            //    sales,
+            //    amount,
+            //    orderTime
 
+            //    //orderTime
 
+            //});
+        }
 
-
-    }
 }
