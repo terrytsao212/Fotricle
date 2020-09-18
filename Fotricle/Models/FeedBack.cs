@@ -25,8 +25,10 @@ namespace Fotricle.Models
         public virtual Order Order { set; get; }//virtual的意思是虛擬的
 
 
+        public int CustomerId { get; set; }
+        [ForeignKey("CustomerId")]
         [Display(Name = "客戶編號")]
-        public int CustomerId  { set; get; }//virtual的意思是虛擬的
+        public virtual Customer Customer { set; get; }
 
         [Display(Name = "餐點滿意程度")]
         [MaxLength(length: 50)]//最大長度為200

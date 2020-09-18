@@ -27,10 +27,14 @@ namespace Fotricle.Controllers
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
-            var feedback = db.FeedBacks.Where(f => f.CustomerId == id)
+            var feedback = db.FeedBacks.Where(f => f.Order.BrandId == id)
                 .Select(f => new
                 {
+                    
                     f.CustomerId,
+                    f.Customer.UserName,
+                    f.Customer.CusPhoto,
+                    f.Order.BrandId,
                     f.Guid,
                     f.OrderId,
                     f.Food,

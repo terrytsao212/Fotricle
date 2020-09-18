@@ -86,5 +86,7 @@ namespace Fotricle.Models
         [MaxLength(length: 50)]//最大長度為200
         public string Permission { set; get; }
 
+        public virtual ICollection<OpenTime> OpenTimes{ get; set; }
+
     }
 }

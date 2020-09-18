@@ -166,6 +166,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\BrandCartController.cs" />
     <Compile Include="Controllers\BrandOrdersController.cs" />
     <Compile Include="Controllers\BrandsController.cs" />
     <Compile Include="Controllers\CartsController.cs" />
@@ -174,7 +175,9 @@
     <Compile Include="Controllers\FeedBacksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MyFollowsController.cs" />
+    <Compile Include="Controllers\NoticesController.cs" />
     <Compile Include="Controllers\OpenTimesController.cs" />
+    <Compile Include="Controllers\PayController.cs" />
     <Compile Include="Controllers\ProductListsController.cs" />
     <Compile Include="Controllers\ValueController.cs" />
     <Compile Include="Global.asax.cs">
@@ -183,6 +186,14 @@
     <Compile Include="Migrations\202009140721304_addFotricle.cs" />
     <Compile Include="Migrations\202009140721304_addFotricle.Designer.cs">
       <DependentUpon>202009140721304_addFotricle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009180448378_newViporder.cs" />
+    <Compile Include="Migrations\202009180448378_newViporder.Designer.cs">
+      <DependentUpon>202009180448378_newViporder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009180830046_addcustomer.cs" />
+    <Compile Include="Migrations\202009180830046_addcustomer.Designer.cs">
+      <DependentUpon>202009180830046_addcustomer.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -193,6 +204,20 @@
     <Compile Include="Models\FeedBack.cs" />
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\MyFollow.cs" />
+    <Compile Include="Models\NewbPay\Atom.cs" />
+    <Compile Include="Models\NewbPay\Atom.T.cs" />
+    <Compile Include="Models\NewbPay\BankInfoModel.cs" />
+    <Compile Include="Models\NewbPay\ConfigurationUtility.cs" />
+    <Compile Include="Models\NewbPay\CryptoUtil.cs" />
+    <Compile Include="Models\NewbPay\LambdaUtil.cs" />
+    <Compile Include="Models\NewbPay\LogUtil.cs" />
+    <Compile Include="Models\NewbPay\PathUtil.cs" />
+    <Compile Include="Models\NewbPay\RazorExtensions.cs" />
+    <Compile Include="Models\NewbPay\SpgatewayInputModel.cs" />
+    <Compile Include="Models\NewbPay\SpgatewayOutputDataModel.cs" />
+    <Compile Include="Models\NewbPay\SpgatewayTakeNumberDataModel.cs" />
+    <Compile Include="Models\NewbPay\StringExtension.cs" />
+    <Compile Include="Models\NewbPay\TradeInfo.cs" />
     <Compile Include="Models\Notice.cs" />
     <Compile Include="Models\OpenTime.cs" />
     <Compile Include="Models\Order.cs" />
@@ -204,6 +229,7 @@
     <Compile Include="Models\ViewCart.cs" />
     <Compile Include="Models\ViewFeedBack.cs" />
     <Compile Include="Models\ViewMyfollow.cs" />
+    <Compile Include="Models\ViewNoitce.cs" />
     <Compile Include="Models\ViewOrder.cs" />
     <Compile Include="Models\ViewOrderStatus.cs" />
     <Compile Include="Models\ViewProductBool.cs" />
@@ -213,6 +239,7 @@
     <Compile Include="Models\ViewOpenT.cs" />
     <Compile Include="Models\ViewProducts.cs" />
     <Compile Include="Models\ViewSaleData.cs" />
+    <Compile Include="Models\VipOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\JwtAuthFilter.cs" />
     <Compile Include="Security\JwtAuthUtil.cs" />
@@ -306,6 +333,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202009140721304_addFotricle.resx">
       <DependentUpon>202009140721304_addFotricle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009180448378_newViporder.resx">
+      <DependentUpon>202009180448378_newViporder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009180830046_addcustomer.resx">
+      <DependentUpon>202009180830046_addcustomer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

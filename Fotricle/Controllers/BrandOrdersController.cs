@@ -42,7 +42,7 @@ namespace Fotricle.Controllers
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             List<Brand> brands = db.Brands.Where(x => x.Id == id).ToList();
             List<Order> orders = db.Orders.Where(x => x.BrandId == id).ToList();
-            List<Cart> carts = db.Carts.Where(x => x.CustomerId == id).ToList();
+            List<Cart> carts = db.Carts.Where(x => x.BrandId == id).ToList();
             SqlConnection Conn = new SqlConnection();
             Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
             DataTable dt = new DataTable();
@@ -53,7 +53,7 @@ namespace Fotricle.Controllers
             cmd.Parameters["@BrandId"].Value = brands.Select(x => x.Id).FirstOrDefault();
 
             cmd.Parameters.Add("@CustomerId", SqlDbType.Int);
-            cmd.Parameters["@CustomerId"].Value = 99;
+            cmd.Parameters["@CustomerId"].Value = 666;
 
             cmd.Parameters.Add("@Payment", SqlDbType.Int);
             cmd.Parameters["@Payment"].Value = 1;
@@ -106,6 +106,7 @@ namespace Fotricle.Controllers
 
 
             db.SaveChanges();
+
             return Ok(new
             {
                 result = true,
@@ -122,12 +123,13 @@ namespace Fotricle.Controllers
             //string token = Request.Headers.Authorization.Parameter;
             //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-            List<Order> orders = db.Orders.Where(o => o.BrandId == id && o.OrderTime > DateTime.Today).ToList();
+            List<Order> orders = db.Orders.Where(o => o.BrandId == id && o.InitDate > DateTime.Today).ToList();
             List<OrderDetail> orderDetails = db.OrderDetails.ToList();
             List<Brand> brands = db.Brands.ToList();
             var today = orders.Select(x => new
             {
-                x.MealNumber
+                x.MealNumber,
+                State = x.OrderStatus.ToString()
                 //x.LinepayVer,
                 //Total = x.OrderDetails.Sum(o => o.Amount),
                 //x.OrderDetails
@@ -152,12 +154,14 @@ namespace Fotricle.Controllers
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-            List<Order> orders = db.Orders.Where(o=>o.BrandId==id&&o.OrderTime>DateTime.Today).ToList();
+            List<Order> orders = db.Orders.Where(o => o.BrandId == id && o.InitDate > DateTime.Today).ToList();
             List<OrderDetail> orderDetails = db.OrderDetails.ToList();
             List<Brand> brands = db.Brands.ToList();
             var today = orders.Select(x => new
             {
+                
                 x.Id,
+                x.CustomerId,
                 status = x.OrderStatus.ToString(),
                 x.OrderNumber,
                 brandName=x.Brand.BrandName,
@@ -165,6 +169,7 @@ namespace Fotricle.Controllers
                 Total = x.OrderDetails.Sum(o => o.Amount),
                 Site=x.Site.ToString(),
                 x.OrderDetails
+
             }).ToList();
 
             return Ok(new
@@ -360,26 +365,7 @@ namespace Fotricle.Controllers
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-<<<<<<< HEAD
-            List<Order> orders = db.Orders.Where(o => o.BrandId == id && o.OrderTime > DateTime.Today).ToList();
-            //var amount = orders.Where(x =>x.OrderTime).Select(y=>y.Amount).Sum(new
-            //{
-            //    total =orders.Sum
-            //});
-            var sales = db.Orders.Select(c => c.Id).Count();
-            //var amount = db.Orders.Select(c => c.Amount).Sum();
-            var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
-            {
-                x.OrderTime,
-                
-            });
-=======
-            //var sales = db.Orders.Select(c => c.Id).Count();
-            //var amount = db.Orders.Select(c => c.Amount).Sum();
-            //var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
-            //{
-            //    x.OrderTime,
-            //});
+
             SqlConnection Conn = new SqlConnection();
             Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
             DataTable dt = new DataTable();
@@ -389,43 +375,52 @@ namespace Fotricle.Controllers
                 "convert(varchar, OrderTime, 112))x left join (select Date,DATEDIFF(HOUR, SDateTime, EDateTimeDate) workhours,BrandId from OpenTimes)y " +
                 "on right(convert(varchar, x.orderdate, 112),4)=y.Date where x.BrandId=@id";
             SqlCommand cmd = new SqlCommand(query, Conn);
->>>>>>> 5efcd135c4f1525298a1cc0d810c9c7b3c83a7bb
-
-
             cmd.Parameters.AddWithValue("@id", id);
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             adapter.Fill(dt);
 
             return Ok(new
             {
-<<<<<<< HEAD
-                sales,
-                //amount,
-                orderTime
 
-                //orderTime
-
-=======
                 result = true,
-                //opentime,
-                //order
                 數據分析 = dt
->>>>>>> 5efcd135c4f1525298a1cc0d810c9c7b3c83a7bb
+
             });
         }
 
+        //List<Order> orders = db.Orders.Where(o => o.BrandId == id && o.OrderTime > DateTime.Today).ToList();
+        ////var amount = orders.Where(x =>x.OrderTime).Select(y=>y.Amount).Sum(new
+        ////{
+        ////    total =orders.Sum
+        ////});
+        //var sales = db.Orders.Select(c => c.Id).Count();
+        ////var amount = db.Orders.Select(c => c.Amount).Sum();
+        //var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
+        //{
+        //    x.OrderTime,
 
-            //var openTime = db.OpenTimes.Where(c => EntityFunctions.DiffDays(c.EDateTimeDate, c.SDateTime) > 1).ToList();
+        //});
 
-            //return Ok(new
-            //{
-            //    sales,
-            //    amount,
-            //    orderTime
+        ////var sales = db.Orders.Select(c => c.Id).Count();
+        ////var amount = db.Orders.Select(c => c.Amount).Sum();
+        ////var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
+        ////{
+        ////    x.OrderTime,
+        ////});
 
-            //    //orderTime
 
-            //});
-        }
+
+        //var openTime = db.OpenTimes.Where(c => EntityFunctions.DiffDays(c.EDateTimeDate, c.SDateTime) > 1).ToList();
+
+        //return Ok(new
+        //{
+        //    sales,
+        //    amount,
+        //    orderTime
+
+        //    //orderTime
+
+        //});
+    }
 
 }

@@ -137,7 +137,7 @@ namespace Fotricle.Controllers
             //string token = Request.Headers.Authorization.Parameter;
             //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-            List<Order> orders = db.Orders.Where(o => o.CustomerId == id && o.OrderTime > DateTime.Today).ToList();
+            List<Order> orders = db.Orders.Where(o => o.CustomerId == id && o.InitDate > DateTime.Today).ToList();
             List<OrderDetail> orderDetails = db.OrderDetails.ToList();
             List<Brand> brands = db.Brands.ToList();
             var today = orders.Select(x => new

@@ -82,6 +82,7 @@ namespace Fotricle.Models
         public DateTime? InitDate { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        
 
 
     }

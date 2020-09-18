@@ -11,6 +11,7 @@ namespace Fotricle.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
+            //return RedirectPermanent("http://fotricle.rocket-coding.com/");
 
             return View();
         }

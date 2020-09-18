@@ -14,18 +14,16 @@ using Fotricle.Security;
 
 namespace Fotricle.Controllers
 {
-    public class CartsController : ApiController
+    public class BrandCartController : ApiController
     {
-        private Model1 db = new Model1();
 
-
-        //新增購物車
+        //新增現場單購物車
         [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("cart/add")]
+        [System.Web.Http.Route("BrandCart/add")]
         [JwtAuthFilter]
-        public IHttpActionResult PostCart(ViewCart viewCart)
+        public IHttpActionResult BrandPostCart(ViewBrandCart viewBrandCart)
         {
-            var Product = db.ProductLists.Find(viewCart.ProductListId);
+            var Product = db.ProductLists.Find(viewBrandCart.ProductListId);
             if (Product == null)
             {
                 return NotFound();
@@ -37,12 +35,12 @@ namespace Fotricle.Controllers
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
             bool isCart = db.Carts
-                .Where(c => c.CustomerId == id)
-                .Any(c => c.ProductListId == viewCart.ProductListId);
+                .Where(c => c.BrandId == id)
+                .Any(c => c.ProductListId == viewBrandCart.ProductListId);
 
             if (isCart) //購物車有相同的商品
             {
-                Cart cart = db.Carts.First(c => c.CustomerId == id && c.ProductListId == viewCart.ProductListId);
+                Cart cart = db.Carts.First(c => c.BrandId == id && c.ProductListId == viewBrandCart.ProductListId);
                 cart.ProductUnit += 1;
                 cart.Amount = cart.ProductPrice * cart.ProductUnit;
             }
@@ -51,21 +49,19 @@ namespace Fotricle.Controllers
                 //餐車業主
                 var Brand = db.Brands.FirstOrDefault(b => b.Id == Product.BrandId);
 
-                var image = db.ProductLists.FirstOrDefault(p => p.Id == viewCart.ProductListId).ProductPhoto;
 
-                db.Carts.Add(new Cart
-                {
-                    CustomerId = id,
-                    BrandId = Brand.Id,
-                    BrandName = Brand.BrandName,
-                    ProductListId = viewCart.ProductListId,
-                    ProductName = Product.ProductName,
-                    ProductPhoto = Product.ProductPhoto,
-                    ProductPrice = Product.Price,
-                    ProductUnit = viewCart.ProductUnit,
-                    Amount = Product.Price * viewCart.ProductUnit,
+            db.Carts.Add(new Cart
+            {
+                CustomerId = 666,
+                BrandId = id,
+                BrandName = Brand.BrandName,
+                ProductListId = viewBrandCart.ProductListId,
+                ProductName = Product.ProductName,
+                ProductPrice = Product.Price,
+                ProductUnit = viewBrandCart.ProductUnit,
+                Amount = Product.Price * viewBrandCart.ProductUnit,
 
-                });
+            });
 
             }
 
@@ -90,18 +86,17 @@ namespace Fotricle.Controllers
                             cart.ProductUnit,
                             cart.ProductPrice,
                             cart.Amount,
-                            cart.ProductPhoto
+
                         }
                     })
             });
         }
 
-
-
-        // 刪除購物車
-        [System.Web.Http.Route("cart/{Id}")]
-        [JwtAuthFilter]
-        public IHttpActionResult DeleteCart(int id)
+        // 刪除現場單購物車
+        [System.Web.Http.HttpDelete]
+        [System.Web.Http.Route("BrandCart/{Id}")]
+        //[JwtAuthFilter]
+        public IHttpActionResult BrandDeleteCart(int id)
         {
             Cart cart = db.Carts.Find(id);
             if (cart == null)
@@ -115,12 +110,13 @@ namespace Fotricle.Controllers
             return Ok(cart);
         }
 
-        // 清空購物車
-        [System.Web.Http.Route("cart/ALL")]
+        // 清空現場單購物車
+        [System.Web.Http.HttpDelete]
+        [System.Web.Http.Route("BrandCart/ALL")]
         [JwtAuthFilter]
 
 
-        public IHttpActionResult DeleteCartAll()
+        public IHttpActionResult BrandDeleteCartAll()
         {
 
             string token = Request.Headers.Authorization.Parameter;
@@ -129,7 +125,7 @@ namespace Fotricle.Controllers
 
 
             // Cart cart = db.Carts.Find(id);
-            var carts = db.Carts.Where(c => c.CustomerId == id);
+            var carts = db.Carts.Where(c => c.BrandId == id);
 
 
             db.Carts.RemoveRange(carts);
@@ -143,19 +139,19 @@ namespace Fotricle.Controllers
             });
         }
 
-        //Get顧客購物車資料
+        //Get顧客現場購物車資料
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("cart/customer/{cartId}")]
+        [System.Web.Http.Route("BrandCart/customer/{cartId}")]
         [JwtAuthFilter]
 
-        public IHttpActionResult GetCart(int cartId)
+        public IHttpActionResult BrandGetCart(int cartId)
         {
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
 
-            var carts = db.Carts.Where(cart => cart.CustomerId == id)
+            var carts = db.Carts.Where(cart => cart.BrandId == id)
                 .Select(cart => new
                 {
                     cart.Id,
@@ -179,11 +175,11 @@ namespace Fotricle.Controllers
 
         }
 
-        //修改購物車資料(cart流水Id)
+        //修改現場購物車資料(cart流水Id)
         [System.Web.Http.HttpPatch]
         [JwtAuthFilter]
-        [System.Web.Http.Route("cart/Edit")]
-        public IHttpActionResult EditCart(string id, [Bind(Include = "Id,ProductUnit")] ViewCart viewCart)
+        [System.Web.Http.Route("BrandCart/Edit")]
+        public IHttpActionResult BrandEditCart(string id, [Bind(Include = "Id,ProductUnit")] ViewBrandCart viewBrandCart)
         {
             if (!ModelState.IsValid)
             {
@@ -192,8 +188,8 @@ namespace Fotricle.Controllers
             Cart cart = new Cart();
             int id_temp = Convert.ToInt32(id);
             cart = db.Carts.Where(c => c.Id == id_temp).FirstOrDefault();
-            cart.ProductUnit = viewCart.ProductUnit;
-            cart.Amount = viewCart.ProductUnit * cart.ProductPrice;
+            cart.ProductUnit = viewBrandCart.ProductUnit;
+            cart.Amount = viewBrandCart.ProductUnit * cart.ProductPrice;
             //cart.Amount = viewCart.Amount;
 
             db.Entry(cart).State = EntityState.Modified;
@@ -210,21 +206,33 @@ namespace Fotricle.Controllers
 
 
 
-        
 
 
 
 
 
+        private Model1 db = new Model1();
 
-        // GET: api/Carts
+        // GET: api/BrandCart
         public IQueryable<Cart> GetCarts()
         {
             return db.Carts;
         }
 
+        // GET: api/BrandCart/5
+        [ResponseType(typeof(Cart))]
+        public IHttpActionResult GetCart(int id)
+        {
+            Cart cart = db.Carts.Find(id);
+            if (cart == null)
+            {
+                return NotFound();
+            }
 
-        // PUT: api/Carts/5
+            return Ok(cart);
+        }
+
+        // PUT: api/BrandCart/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutCart(int id, Cart cart)
         {
@@ -259,7 +267,7 @@ namespace Fotricle.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Carts
+        // POST: api/BrandCart
         [ResponseType(typeof(Cart))]
         public IHttpActionResult PostCart(Cart cart)
         {
@@ -274,6 +282,21 @@ namespace Fotricle.Controllers
             return CreatedAtRoute("DefaultApi", new { id = cart.Id }, cart);
         }
 
+        // DELETE: api/BrandCart/5
+        [ResponseType(typeof(Cart))]
+        public IHttpActionResult DeleteCart(int id)
+        {
+            Cart cart = db.Carts.Find(id);
+            if (cart == null)
+            {
+                return NotFound();
+            }
+
+            db.Carts.Remove(cart);
+            db.SaveChanges();
+
+            return Ok(cart);
+        }
 
         protected override void Dispose(bool disposing)
         {

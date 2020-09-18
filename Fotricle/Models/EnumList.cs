@@ -7,6 +7,7 @@ namespace Fotricle.Models
 {
     public enum VipMember
     {
+        審核中=2,
         是 = 1,
         否 = 0,
     }
@@ -50,6 +51,7 @@ namespace Fotricle.Models
         訂單失敗 = 2,
         訂單餐點完成 = 3,
         訂單完成 = 4,
+        回饋單已填寫=5,
     }
 
     public enum PaymentMethod
@@ -83,6 +85,12 @@ namespace Fotricle.Models
     {
         否 = 0,
         是 = 1,
+    }
+
+    public enum ReadOrNot
+    {
+        否=0,
+        是=1,
     }
 
 
