@@ -80,7 +80,10 @@ namespace Fotricle.Controllers
             cmd.Parameters["@LinepayVer"].Value = viewOrder.LinepayVer;
 
             cmd.Parameters.Add("@Site", SqlDbType.Int);
-            cmd.Parameters["@Site"].Value = viewOrder.Site;
+            cmd.Parameters["@Site"].Value = 0;
+
+            cmd.Parameters.Add("@OrderStatus", SqlDbType.Int);
+            cmd.Parameters["@OrderStatus"].Value = 0;
 
             cmd.Parameters.Add("@Remarks", SqlDbType.NVarChar);
             cmd.Parameters["@Remarks"].Value = viewOrder.Remarks is null ? "" : viewOrder.Remarks;
@@ -125,12 +128,15 @@ namespace Fotricle.Controllers
 
 
         //Get顧客訂單資料
+        [HttpGet]
+        //[JwtAuthFilter]
         [Route("customer/orders")]
-        public IHttpActionResult GetCustomerOrders()
+       
+        public IHttpActionResult GetCustomerOrders(int id)
         {
-            string token = Request.Headers.Authorization.Parameter;
-            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
-            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            //string token = Request.Headers.Authorization.Parameter;
+            //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             List<Order> orders = db.Orders.Where(o => o.CustomerId == id && o.OrderTime > DateTime.Today).ToList();
             List<OrderDetail> orderDetails = db.OrderDetails.ToList();
             List<Brand> brands = db.Brands.ToList();

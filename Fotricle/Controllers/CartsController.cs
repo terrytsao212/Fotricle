@@ -288,7 +288,7 @@ namespace Fotricle.Controllers
         // 刪除現場單購物車
        
         [System.Web.Http.Route("BrandCart/{Id}")]
-        [JwtAuthFilter]
+        //[JwtAuthFilter]
         public IHttpActionResult BrandDeleteCart(int id)
         {
             Cart cart = db.Carts.Find(id);

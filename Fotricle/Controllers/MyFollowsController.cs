@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -26,18 +28,23 @@ namespace Fotricle.Controllers
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-            var myfollow = db.MyFollows.Where(m => m.CustomerId == id)
-               .Select(m => new
-               {
-                   m.Id,
-                   m.CustomerId,
-                   m.BrandId,
-                   m.BrandName
-               });
+
+            SqlConnection Conn = new SqlConnection();
+            Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
+            DataTable dt = new DataTable();
+            SqlCommand cmd = new SqlCommand(@"select f.BrandName,o.SDateTime,o.EDateTimeDate,o.Location
+                       from MyFollows f inner join OpenTimes o on f.BrandId=o.BrandId
+                       where f.CustomerId=@id and o.Date=right(convert(varchar,getdate(),112),4)", Conn);
+
+            cmd.Parameters.AddWithValue("@id", id);
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            adapter.Fill(dt);
+
+           
             return Ok(new
             {
                 result = true,
-                myfollow
+                dt
             });
         }
         // GET: api/MyFollows
