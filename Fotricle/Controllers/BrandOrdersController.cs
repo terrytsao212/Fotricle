@@ -356,11 +356,17 @@ namespace Fotricle.Controllers
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            List<Order> orders = db.Orders.Where(o => o.BrandId == id && o.OrderTime > DateTime.Today).ToList();
+            //var amount = orders.Where(x =>x.OrderTime).Select(y=>y.Amount).Sum(new
+            //{
+            //    total =orders.Sum
+            //});
             var sales = db.Orders.Select(c => c.Id).Count();
-            var amount = db.Orders.Select(c => c.Amount).Sum();
+            //var amount = db.Orders.Select(c => c.Amount).Sum();
             var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
             {
                 x.OrderTime,
+                
             });
 
 
@@ -369,7 +375,7 @@ namespace Fotricle.Controllers
             return Ok(new
             {
                 sales,
-                amount,
+                //amount,
                 orderTime
 
                 //orderTime
