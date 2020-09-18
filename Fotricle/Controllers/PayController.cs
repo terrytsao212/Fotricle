@@ -205,7 +205,7 @@ namespace Fotricle.Controllers
                     //MerchantOrderNo = "O202009100034"
                     //convertModel.MerchantOrderNo
                     VipOrder vip = db.VipOrders.Find(pay.BrandId);
-                    vip.Status = "已付款";
+                    vip.Status = "已付款成功";
                    
                     db.Entry(vip).State = EntityState.Modified;
                     db.SaveChanges();
