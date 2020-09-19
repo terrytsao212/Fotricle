@@ -15,15 +15,13 @@ namespace Fotricle.Models
         public int CustomerId { get; set; }
 
         [Display(Name = "餐點滿意程度")]
-
-        public string Food { set; get; }
+        public int Food { set; get; }
 
         [Display(Name = "服務滿意程度")]
-        public string Service { set; get; }
+        public int Service { set; get; }
 
         [Display(Name = "整體滿意程度")]
-
-        public string AllSuggest { set; get; }
+        public int AllSuggest { set; get; }
 
         [Display(Name = "餐車建議")]
         public string CarSuggest { set; get; }

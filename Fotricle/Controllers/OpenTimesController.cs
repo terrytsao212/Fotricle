@@ -35,6 +35,7 @@ namespace Fotricle.Controllers
                 c.Date,
                 c.SDateTime,
                 c.EDateTimeDate,
+                c.OpenDate,
                 status = c.Status.ToString(),
                 c.Location
                 
@@ -118,6 +119,7 @@ namespace Fotricle.Controllers
             open.Location = openTime.Location;
             open.SDateTime = openTime.SDateTime;
             open.EDateTimeDate = openTime.EDateTimeDate;
+            open.OpenDate = openTime.OpenDate;
             open.Status = openTime.Status;
 
             db.Entry(open).State = EntityState.Modified;

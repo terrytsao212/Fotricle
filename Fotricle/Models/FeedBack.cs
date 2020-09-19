@@ -31,16 +31,16 @@ namespace Fotricle.Models
         public virtual Customer Customer { set; get; }
 
         [Display(Name = "餐點滿意程度")]
-        [MaxLength(length: 50)]//最大長度為200
-        public string Food { set; get; }
+        
+        public int Food { set; get; }
 
         [Display(Name = "服務滿意程度")]
-        [MaxLength(length: 50)]//最大長度為200
-        public string Service { set; get; }
+        
+        public int Service { set; get; }
 
         [Display(Name = "整體滿意程度")]
-        [MaxLength(length: 50)]//最大長度為200
-        public string AllSuggest { set; get; }
+       
+        public int AllSuggest { set; get; }
 
         [Display(Name = "餐車建議")]
         [MaxLength(length: 100)]//最大長度為200

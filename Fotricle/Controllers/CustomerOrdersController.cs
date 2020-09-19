@@ -129,14 +129,13 @@ namespace Fotricle.Controllers
 
         //Get顧客訂單資料
         [HttpGet]
-        //[JwtAuthFilter]
+        [JwtAuthFilter]
         [Route("customer/orders")]
-       
-        public IHttpActionResult GetCustomerOrders(int id)
+        public IHttpActionResult GetCustomerOrders()
         {
-            //string token = Request.Headers.Authorization.Parameter;
-            //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
-            //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             List<Order> orders = db.Orders.Where(o => o.CustomerId == id && o.InitDate > DateTime.Today).ToList();
             List<OrderDetail> orderDetails = db.OrderDetails.ToList();
             List<Brand> brands = db.Brands.ToList();
@@ -154,16 +153,14 @@ namespace Fotricle.Controllers
                 x.Remark4,
                 Total = x.OrderDetails.Sum(o => o.Amount),
                 x.OrderDetails
-
             }).ToList();
-
             return Ok(new
             {
                 success = true,
                 today,
             });
         }
-        
+
 
         //更新訂單狀態
         [HttpPatch]

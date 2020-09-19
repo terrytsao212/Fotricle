@@ -315,3 +315,4 @@ C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.newViporder.resources
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.addcustomer.resources
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.csprojAssemblyReference.cache
+C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.changeOpentimetype.resources

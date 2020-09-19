@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace Fotricle.Models
 {
@@ -18,18 +19,22 @@ namespace Fotricle.Models
 
         [ForeignKey("BrandId")]
         [Display(Name = "品牌編號")]
+        [JsonIgnore]
         public virtual Brand Brand { set; get; }//virtual的意思是虛擬
 
-        [Display(Name = "日期")]
+        [Display(Name = "營業日期")]
+        public DateTime OpenDate { set; get; }// "?"為允許空值，日期數字才可使用問號
+
+        [Display(Name = "日期")] //要存星期幾
         public string Date { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         public OpenOrNot Status { get; set; }
 
         [Display(Name = "營業時間起")]
-        public string SDateTime { set; get; }
+        public DateTime? SDateTime { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         [Display(Name = "營業時間迄")]
-        public string EDateTimeDate { set; get; }//"?"為允許空值，日期數字才可使用問
+        public DateTime? EDateTimeDate { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         [Display(Name = "營業位置")]
         [MaxLength(length: 50)]//最大長度為200

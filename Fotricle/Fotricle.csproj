@@ -195,6 +195,10 @@
     <Compile Include="Migrations\202009180830046_addcustomer.Designer.cs">
       <DependentUpon>202009180830046_addcustomer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009191606538_changeOpentimetype.cs" />
+    <Compile Include="Migrations\202009191606538_changeOpentimetype.Designer.cs">
+      <DependentUpon>202009191606538_changeOpentimetype.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Brand.cs" />
@@ -339,6 +343,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009180830046_addcustomer.resx">
       <DependentUpon>202009180830046_addcustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009191606538_changeOpentimetype.resx">
+      <DependentUpon>202009191606538_changeOpentimetype.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

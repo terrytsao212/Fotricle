@@ -9,17 +9,18 @@ namespace Fotricle.Models
 {
     public class ViewOpenT
     {
-        [Display(Name = "日期")]
+        [Display(Name = "營業日期")]
+        public DateTime OpenDate { set; get; }// "?"為允許空值，日期數字才可使用問號
+
+        [Display(Name = "日期")] //要存星期幾
         public string Date { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         public OpenOrNot? Status { get; set; }
 
         [Display(Name = "營業時間起")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? SDateTime { set; get; }//"?"為允許空值，日期數字才可使用問號
 
         [Display(Name = "營業時間迄")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? EDateTimeDate { set; get; }//"?"為允許空值，日期數字才可使用問
 
         [Display(Name = "營業位置")]
