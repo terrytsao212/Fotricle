@@ -366,27 +366,70 @@ namespace Fotricle.Controllers
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
-            SqlConnection Conn = new SqlConnection();
-            Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
-            DataTable dt = new DataTable();
-            string query =
-                "select x.orderdate,x.ordernums,x.orderamount,workhours from (select count(o.Id) ordernums," +
-                "convert(varchar, o.OrderTime, 112) orderdate,sum(o.Amount) orderamount,BrandId from orders o group by BrandId," +
-                "convert(varchar, OrderTime, 112))x left join (select Date,DATEDIFF(HOUR, SDateTime, EDateTimeDate) workhours,BrandId from OpenTimes)y " +
-                "on right(convert(varchar, x.orderdate, 112),4)=y.Date where x.BrandId=@id";
-            SqlCommand cmd = new SqlCommand(query, Conn);
-            cmd.Parameters.AddWithValue("@id", id);
-            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-            adapter.Fill(dt);
+            //SqlConnection Conn = new SqlConnection();
+            //Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
+            //DataTable dt = new DataTable();
+            //string query =
+            //    "select x.orderdate,x.ordernums,x.orderamount,workhours from (select count(o.Id) ordernums," +
+            //    "convert(varchar, o.OrderTime, 112) orderdate,sum(o.Amount) orderamount,BrandId from orders o group by BrandId," +
+            //    "convert(varchar, OrderTime, 112))x left join (select Date,DATEDIFF(HOUR, SDateTime, EDateTimeDate) workhours,BrandId from OpenTimes)y " +
+            //    "on right(convert(varchar, x.orderdate, 112),4)=y.Date where x.BrandId=@id";
+            //SqlCommand cmd = new SqlCommand(query, Conn);
+            //cmd.Parameters.AddWithValue("@id", id);
+            //SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            //adapter.Fill(dt);
+            List<Order> orders = db.Orders.Where(o => o.BrandId == id).ToList();
+            var idopen = db.OpenTimes.Where(x => x.BrandId == id && x.Status==OpenOrNot.營業中).ToList();
+
+            var order = orders.Select(x => new
+            {
+                OrderId = x.Id,
+                orders,
+                BrandName = x.Brand.BrandName,
+                time = x.OrderTime,
+                x.Amount,
+
+            }).GroupBy(x => x.BrandName).Select(x => new
+            {
+                BrandName = x.Key,
+                Time = x.GroupBy(y => y.time).Select(y => new
+                {
+                    Ordertime = y.Key,
+                    total = y.Sum(a => a.Amount),
+                    count = y.Count(),
+                    workhour = WorkTime(y.Key, idopen),
+                }),
+
+            });
+
 
             return Ok(new
             {
-
                 result = true,
-                數據分析 = dt
-
+                
+                數據統計=order
+               
             });
         }
+
+
+        public double WorkTime(DateTime? key, List<OpenTime> opensList)
+            {
+                //key = key.Replace("-", "");
+                var open = opensList.Where(y => y.Date == key).FirstOrDefault();
+                if (open == null)
+                {
+                    return 0;
+                }
+                double workHour = new TimeSpan(open.EDateTimeDate.Value.Ticks - open.SDateTime.Value.Ticks).TotalHours;
+                return workHour;
+            }
+
+
+
+
+          
+        
 
         //List<Order> orders = db.Orders.Where(o => o.BrandId == id && o.OrderTime > DateTime.Today).ToList();
         ////var amount = orders.Where(x =>x.OrderTime).Select(y=>y.Amount).Sum(new
