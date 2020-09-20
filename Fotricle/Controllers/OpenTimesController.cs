@@ -106,7 +106,7 @@ namespace Fotricle.Controllers
         [System.Web.Http.Route("OpenTime/Edit")]
 
         public IHttpActionResult EditOpenTime(string id,
-            [Bind(Include = "Id,Date,Status,SDateTime,EDateTimeDate,Location")]OpenTime openTime)
+            [Bind(Include = "Id,Date,Status,SDateTime,EDateTimeDate,OpenDate,Location")]OpenTime openTime)
         {
             if (!ModelState.IsValid)
             {
