@@ -386,7 +386,7 @@ namespace Fotricle.Controllers
                 OrderId = x.Id,
                 orders,
                 BrandName = x.Brand.BrandName,
-                time = x.OrderTime,
+                time = Convert.ToDateTime(x.OrderTime).ToString("yyyy-MM-dd"),
                 x.Amount,
 
             }).GroupBy(x => x.BrandName).Select(x => new
@@ -413,10 +413,10 @@ namespace Fotricle.Controllers
         }
 
 
-        public double WorkTime(DateTime? key, List<OpenTime> opensList)
+        public double WorkTime(string key, List<OpenTime> opensList)
             {
-                //key = key.Replace("-", "");
-                var open = opensList.Where(y => y.Date == key).FirstOrDefault();
+                key = key.Replace("-", "");
+                var open = opensList.Where(y => y.OpenDate.ToString("yyyy-MM-dd") == key).FirstOrDefault();
                 if (open == null)
                 {
                     return 0;
