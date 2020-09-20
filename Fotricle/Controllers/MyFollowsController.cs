@@ -109,7 +109,7 @@ namespace Fotricle.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var checkMyfollow = db.MyFollows.FirstOrDefault(m => m.BrandId == myFollow.BrandId);
+            var checkMyfollow = db.MyFollows.FirstOrDefault(m => m.BrandId == myFollow.BrandId && m.CustomerId == id);
             if (checkMyfollow != null)
             {
                 return Ok(new
