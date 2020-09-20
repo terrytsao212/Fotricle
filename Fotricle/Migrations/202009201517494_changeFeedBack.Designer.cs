@@ -7,13 +7,13 @@ namespace Fotricle.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class changeOpentimetype : IMigrationMetadata
+    public sealed partial class changeFeedBack : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(changeOpentimetype));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(changeFeedBack));
         
         string IMigrationMetadata.Id
         {
-            get { return "202009191606538_changeOpentimetype"; }
+            get { return "202009201517494_changeFeedBack"; }
         }
         
         string IMigrationMetadata.Source

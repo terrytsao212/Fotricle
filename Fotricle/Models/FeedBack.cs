@@ -32,15 +32,15 @@ namespace Fotricle.Models
 
         [Display(Name = "餐點滿意程度")]
         
-        public double Food { set; get; }
+        public float Food { set; get; }
 
         [Display(Name = "服務滿意程度")]
         
-        public double Service { set; get; }
+        public float Service { set; get; }
 
         [Display(Name = "整體滿意程度")]
        
-        public double AllSuggest { set; get; }
+        public float AllSuggest { set; get; }
 
         [Display(Name = "餐車建議")]
         [MaxLength(length: 100)]//最大長度為200

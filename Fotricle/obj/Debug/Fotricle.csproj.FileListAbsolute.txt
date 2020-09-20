@@ -315,7 +315,6 @@ C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.newViporder.resources
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.addcustomer.resources
 C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.csprojAssemblyReference.cache
-C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.changeOpentimetype.resources
 C:\Users\admin\Desktop\Fotricle_20200920\Fotricle\Fotricle\obj\Debug\Fotricle.csprojAssemblyReference.cache
 C:\Users\admin\Desktop\Fotricle_20200920\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.addFotricle.resources
 C:\Users\admin\Desktop\Fotricle_20200920\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.newViporder.resources
@@ -423,3 +422,4 @@ C:\Users\admin\Desktop\Fotricle_20200920\Fotricle\Fotricle\bin\zh-Hant\System.We
 C:\Users\admin\Desktop\Fotricle_20200920\Fotricle\Fotricle\bin\zh-Hant\System.Web.WebPages.Deployment.resources.dll
 C:\Users\admin\Desktop\Fotricle_20200920\Fotricle\Fotricle\bin\zh-Hant\System.Web.WebPages.Razor.resources.dll
 C:\Users\admin\Desktop\Fotricle_20200920\Fotricle\Fotricle\obj\Debug\Fotricle.csproj.CopyComplete
+C:\Users\User\Desktop\火箭隊資料\4.專題\2.專題程式\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.changeFeedBack.resources
