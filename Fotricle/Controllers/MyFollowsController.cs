@@ -32,9 +32,11 @@ namespace Fotricle.Controllers
             SqlConnection Conn = new SqlConnection();
             Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
             DataTable dt = new DataTable();
-            SqlCommand cmd = new SqlCommand(@"select f.BrandName,o.SDateTime,o.EDateTimeDate,o.Location
-                       from MyFollows f inner join OpenTimes o on f.BrandId=o.BrandId
-                       where f.CustomerId=@id and o.Date=right(convert(varchar,getdate(),112),4)", Conn);
+            
+            SqlCommand cmd = new SqlCommand(@"select f.BrandName,left(convert(varchar,o.SDateTime,108),5) SDateTime,
+                           left(convert(varchar,o.EDateTimeDate,108),5) EDateTimeDate,o.Location
+                           from MyFollows f inner join OpenTimes o on f.BrandId = o.BrandId
+                           where f.CustomerId=@id and o.OpenDate = convert(varchar,getdate(),111)", Conn);
 
             cmd.Parameters.AddWithValue("@id", id);
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
@@ -107,7 +109,7 @@ namespace Fotricle.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var checkMyfollow = db.MyFollows.FirstOrDefault(m => m.BrandId == myFollow.BrandId);
+            var checkMyfollow = db.MyFollows.FirstOrDefault(m => m.BrandId == myFollow.BrandId && m.CustomerId == id);
             if (checkMyfollow != null)
             {
                 return Ok(new

@@ -28,19 +28,41 @@ namespace Fotricle.Controllers
             //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             Brand brand = db.Brands.Find(id);
-            var open = db.OpenTimes.Where(c => c.BrandId == id).Select(c => new
+
+            var openTimes = db.OpenTimes.Where(o => o.BrandId == id);
+            List<OpenTime> open = openTimes.ToList();
+
+            var result = new
             {
-                id=c.Id,
-                c.BrandId,
-                c.Date,
-                c.SDateTime,
-                c.EDateTimeDate,
-                c.OpenDate,
-                status = c.Status.ToString(),
-                c.Location
-                
-            });
-            return Ok(new { success = true, open });
+                open = open.Select(x => new
+                {
+                    x.Id,
+                    x.BrandId,
+                    x.Brand.BrandName,
+                    opdate = Convert.ToDateTime(x.OpenDate).ToString("yyyy-MM-dd"),
+                    Start_time = Convert.ToDateTime(x.SDateTime).ToString("HH:mm"),
+                    End_time = Convert.ToDateTime(x.EDateTimeDate).ToString("HH:mm"),
+                    x.Date,
+                    Status = x.Status.ToString(),
+                    x.Location,
+
+                }),
+            };
+
+
+            //var open = db.OpenTimes.Where(c => c.BrandId == id).Select(c => new
+            //{
+            //    id=c.Id,
+            //    c.BrandId,
+            //    c.Date,
+            //    c.SDateTime,
+            //    c.EDateTimeDate,
+            //    c.OpenDate,
+            //    status = c.Status.ToString(),
+            //    c.Location
+
+            //});
+            return Ok(new { success = true, result });
 
 
         }
