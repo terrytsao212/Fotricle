@@ -195,9 +195,13 @@
     <Compile Include="Migrations\202009180830046_addcustomer.Designer.cs">
       <DependentUpon>202009180830046_addcustomer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202009201517494_changeFeedBack.cs" />
-    <Compile Include="Migrations\202009201517494_changeFeedBack.Designer.cs">
-      <DependentUpon>202009201517494_changeFeedBack.cs</DependentUpon>
+    <Compile Include="Migrations\202009210157587_changeFeedbacktype.cs" />
+    <Compile Include="Migrations\202009210157587_changeFeedbacktype.Designer.cs">
+      <DependentUpon>202009210157587_changeFeedbacktype.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009210210466_changeFeedbacktodouble.cs" />
+    <Compile Include="Migrations\202009210210466_changeFeedbacktodouble.Designer.cs">
+      <DependentUpon>202009210210466_changeFeedbacktodouble.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -344,8 +348,11 @@
     <EmbeddedResource Include="Migrations\202009180830046_addcustomer.resx">
       <DependentUpon>202009180830046_addcustomer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202009201517494_changeFeedBack.resx">
-      <DependentUpon>202009201517494_changeFeedBack.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202009210157587_changeFeedbacktype.resx">
+      <DependentUpon>202009210157587_changeFeedbacktype.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009210210466_changeFeedbacktodouble.resx">
+      <DependentUpon>202009210210466_changeFeedbacktodouble.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

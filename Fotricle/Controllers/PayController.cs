@@ -22,8 +22,8 @@ namespace Fotricle.Controllers
             MerchantID = "MS113893343",
             HashKey = "6gfdegvpE7wwJ2zKz9GpxxVCijHgFPvz",
             HashIV = "Cxyx7qJ1IdkQNyFP",
-            ReturnURL = "http://yourWebsitUrl/Bank/SpgatewayReturn",
-            NotifyURL = "http://yourWebsitUrl/Bank/SpgatewayNotify",
+            ReturnURL = "http://fotricle.rocket-coding.com",
+            NotifyURL = "http://fotricle.rocket-coding.com/api/Pay/Notify",
             CustomerURL = "http://yourWebsitUrl/Bank/SpgatewayCustomer",
             AuthUrl = "https://ccore.spgateway.com/MPG/mpg_gateway",
             CloseUrl = "https://core.newebpay.com/API/CreditCard/Close"

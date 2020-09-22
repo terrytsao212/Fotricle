@@ -131,6 +131,10 @@ namespace Fotricle.Controllers
 
         public IHttpActionResult DeleteProductList(int id)
         {
+            //string token = Request.Headers.Authorization.Parameter;
+            //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            
             ProductList productList = db.ProductLists.Find(id);
             if (productList == null)
             {

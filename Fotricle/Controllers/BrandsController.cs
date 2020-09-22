@@ -244,17 +244,80 @@ namespace Fotricle.Controllers
         }
 
 
-        //Get餐車品牌全部
+        ////Get餐車品牌全部
+        //[System.Web.Http.HttpGet]
+        //[System.Web.Http.Route("Brand/All")]
+        //// GET: api/Brands
+        //public IQueryable<Brand> GetBrands()
+        //{
+        //    return db.Brands;
+        //}
+
+
+
+        //拿餐車品牌名稱
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("Brand/All")]
-        // GET: api/Brands
-        public IQueryable<Brand> GetBrands()
+        public IHttpActionResult GetBrandsAll()
         {
-            return db.Brands;
+            List<Order> orders = db.Orders.ToList();
+            List<OpenTime> openTimes = db.OpenTimes.ToList();
+            List<Brand> brands = db.Brands.ToList();
+            List<FeedBack> feedBacks = db.FeedBacks.ToList();
+            var brandAll = brands.Select(x => new
+            {
+                x.Id,
+                x.Email,
+                x.BrandName,
+                x.BrandStory,
+                x.PhoneNumber,
+                x.LogoPhoto,
+                x.CarImage,
+                x.LinePay,
+                x.QrCode,
+                x.FbAccount,
+                Sort = x.Sort.ToString(),
+            });
+            var brandopentime = openTimes.Select(x => new
+            {
+                x.Id,
+                x.BrandId,
+                x.Brand.BrandName,
+                OpenDate = x.OpenDate.ToString("yyyy-MM-dd"),
+                x.Date,
+                Status = x.Status.ToString(),
+                SDateTime = x.SDateTime.Value.ToString("HH:mm"),
+                EDateTimeDate = x.EDateTimeDate.Value.ToString("HH:mm"),
+                x.Location,
+            });
+            var brandfeedback = from o in orders
+                join f in feedBacks on o.Id equals f.OrderId
+                join b in brands on o.BrandId equals b.Id
+                select new
+                {
+                    f.Customer.UserName,
+                    f.Customer.CusPhoto,
+                    f.CarSuggest,
+                    f.OrderId,
+                    o.BrandId,
+                    f.Food,
+                    f.Service,
+                    f.AllSuggest
+                };
+            return Ok(new
+            {
+                result = true,
+                brandAll,
+                brandopentime,
+                brandfeedback
+            });
         }
+    
 
-        //Get餐車品牌單一名稱
-        [System.Web.Http.HttpGet]
+
+
+    //Get餐車品牌單一名稱
+    [System.Web.Http.HttpGet]
         [JwtAuthFilter]
         [System.Web.Http.Route("Brand/GetBrand")]
         public IHttpActionResult GetBrands(int id)

@@ -415,7 +415,7 @@ namespace Fotricle.Controllers
 
         public double WorkTime(string key, List<OpenTime> opensList)
             {
-                key = key.Replace("-", "");
+                //key = key.Replace("-", "");
                 var open = opensList.Where(y => y.OpenDate.ToString("yyyy-MM-dd") == key).FirstOrDefault();
                 if (open == null)
                 {

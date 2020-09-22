@@ -20,17 +20,18 @@ namespace Fotricle.Controllers
         //Get 顧客回饋單
         [HttpGet]
         [Route("customer/feedback")]
-        [JwtAuthFilter]
-        public IHttpActionResult GetFeedBack()
+        //[JwtAuthFilter]
+        public IHttpActionResult GetFeedBack(int id)
         {
-            string token = Request.Headers.Authorization.Parameter;
-            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
-            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            //string token = Request.Headers.Authorization.Parameter;
+            //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
+            Brand brand = db.Brands.Find(id);
             var feedback = db.FeedBacks.Where(f => f.Order.BrandId == id)
                 .Select(f => new
                 {
-                    
+
                     f.CustomerId,
                     f.Customer.UserName,
                     f.Customer.CusPhoto,
@@ -50,7 +51,37 @@ namespace Fotricle.Controllers
 
         }
 
+        //Get 顧客回饋單
+        [HttpGet]
+        [Route("customer/allfeedback")]
+        //[JwtAuthFilter]
+        public IHttpActionResult GetALLFeedBack()
+        {
+            //string token = Request.Headers.Authorization.Parameter;
+            //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
+            //Brand brand = new Brand();
+            var feedback = db.FeedBacks.Select(f => new
+            {
+                //f.CustomerId,
+                f.Customer.UserName,
+                f.Customer.CusPhoto,
+                //f.Order.BrandId,
+                //f.Guid,
+                //f.OrderId,
+                f.Food,
+                f.Service,
+                f.AllSuggest,
+                f.CarSuggest,
+            });
+            return Ok(new
+            {
+                result = true,
+                feedback
+            });
+
+        }
 
 
         //新增回饋單
@@ -109,18 +140,18 @@ namespace Fotricle.Controllers
             return db.FeedBacks;
         }
 
-        // GET: api/FeedBacks/5
-        [ResponseType(typeof(FeedBack))]
-        public IHttpActionResult GetFeedBack(int id)
-        {
-            FeedBack feedBack = db.FeedBacks.Find(id);
-            if (feedBack == null)
-            {
-                return NotFound();
-            }
+        //// GET: api/FeedBacks/5
+        //[ResponseType(typeof(FeedBack))]
+        //public IHttpActionResult GetFeedBack(int id)
+        //{
+        //    FeedBack feedBack = db.FeedBacks.Find(id);
+        //    if (feedBack == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(feedBack);
-        }
+        //    return Ok(feedBack);
+        //}
 
         // PUT: api/FeedBacks/5
         [ResponseType(typeof(void))]

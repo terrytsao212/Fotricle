@@ -29,6 +29,7 @@ namespace Fotricle.Controllers
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             var notice = db.Notices.Where(n => n.Order.CustomerId == id && n.IsRead == 0).Select(n => new
             {
+                n.Id,
                 n.OrderId,
                 n.Order.Brand.BrandName,
                 n.Remarks,
@@ -55,9 +56,11 @@ namespace Fotricle.Controllers
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             var brand = db.Brands.FirstOrDefault(b => b.Id == id);
-           
+            var orders = db.Orders.Where(o => o.Id == viewNoitce.OrderId).FirstOrDefault();
+
             Notice notice = new Notice();
-            
+
+            notice.CustomerId = orders.CustomerId;
             notice.OrderId = viewNoitce.OrderId;
             notice.OrderStatus = viewNoitce.OrderStatus;
             notice.Remarks = viewNoitce.Remarks;
