@@ -33,7 +33,7 @@ namespace Fotricle.Controllers
             Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
             DataTable dt = new DataTable();
             
-            SqlCommand cmd = new SqlCommand(@"select f.BrandId,f.BrandName,left(convert(varchar,o.SDateTime,108),5) SDateTime,
+            SqlCommand cmd = new SqlCommand(@"select f.Id,f.BrandId,f.BrandName,left(convert(varchar,o.SDateTime,108),5) SDateTime,
                            left(convert(varchar,o.EDateTimeDate,108),5) EDateTimeDate,o.Location
                            from MyFollows f inner join OpenTimes o on f.BrandId = o.BrandId
                            where f.CustomerId=@id and o.OpenDate = convert(varchar,getdate(),111)", Conn);
