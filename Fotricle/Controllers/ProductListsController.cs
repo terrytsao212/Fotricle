@@ -90,7 +90,7 @@ namespace Fotricle.Controllers
                 c.ProductName,
                 c.ProductDetail,
                 c.ProductPhoto,
-                c.IsUse,
+                IsUse=c.IsUse.ToString(),
                 c.Price,
                 sort=c.ProductSort.ToString(),
                 c.Total,
@@ -208,6 +208,14 @@ namespace Fotricle.Controllers
                 {
                     result = true,
                     message = "產品已關閉"
+                });
+            }
+            else if (productsList.IsUse == Use.刪除)
+            {
+                return Ok(new
+                {
+                    resutl = true,
+                    message = "產品已刪除"
                 });
             }
             else

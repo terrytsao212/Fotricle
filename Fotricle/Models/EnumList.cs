@@ -85,6 +85,8 @@ namespace Fotricle.Models
     {
         否 = 0,
         是 = 1,
+        刪除=2,
+
     }
 
     public enum ReadOrNot
