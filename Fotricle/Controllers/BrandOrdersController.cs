@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Fotricle.Models;
@@ -37,6 +38,7 @@ namespace Fotricle.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             string token = Request.Headers.Authorization.Parameter;
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
@@ -99,6 +101,7 @@ namespace Fotricle.Controllers
                 db.OrderDetails.Add(orderDetail);
                 //var orderssList = db.Orders.Where(x => x.Id == orderDetail.Id).ToList();
             }
+
             if (carts.Any())
             {
                 db.Carts.RemoveRange(carts);
@@ -114,6 +117,7 @@ namespace Fotricle.Controllers
             });
 
         }
+
         //拿餐車現場的取餐單號
         [HttpGet]
         //[JwtAuthFilter]
@@ -159,15 +163,15 @@ namespace Fotricle.Controllers
             List<Brand> brands = db.Brands.ToList();
             var today = orders.Select(x => new
             {
-                
+
                 x.Id,
                 x.CustomerId,
                 status = x.OrderStatus.ToString(),
                 x.OrderNumber,
-                brandName=x.Brand.BrandName,
+                brandName = x.Brand.BrandName,
                 x.LinepayVer,
                 Total = x.OrderDetails.Sum(o => o.Amount),
-                Site=x.Site.ToString(),
+                Site = x.Site.ToString(),
                 x.OrderDetails
 
             }).ToList();
@@ -261,6 +265,9 @@ namespace Fotricle.Controllers
 
 
 
+
+
+
         // GET: api/BrandOrders/5
         [ResponseType(typeof(Order))]
         public IHttpActionResult GetOrder(int id)
@@ -321,7 +328,7 @@ namespace Fotricle.Controllers
             db.Orders.Add(order);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = order.Id }, order);
+            return CreatedAtRoute("DefaultApi", new {id = order.Id}, order);
         }
 
         // DELETE: api/BrandOrders/5
@@ -379,7 +386,7 @@ namespace Fotricle.Controllers
             //SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             //adapter.Fill(dt);
             List<Order> orders = db.Orders.Where(o => o.BrandId == id).ToList();
-            var idopen = db.OpenTimes.Where(x => x.BrandId == id && x.Status==OpenOrNot.營業中).ToList();
+            var idopen = db.OpenTimes.Where(x => x.BrandId == id && x.Status == OpenOrNot.營業中).ToList();
 
             var order = orders.Select(x => new
             {
@@ -406,64 +413,130 @@ namespace Fotricle.Controllers
             return Ok(new
             {
                 result = true,
-                
-                數據統計=order
-               
+
+                數據統計 = order
+
             });
         }
 
 
         public double WorkTime(string key, List<OpenTime> opensList)
+        {
+            //key = key.Replace("-", "");
+            var open = opensList.Where(y => y.OpenDate.ToString("yyyy-MM-dd") == key).FirstOrDefault();
+            if (open == null)
             {
-                //key = key.Replace("-", "");
-                var open = opensList.Where(y => y.OpenDate.ToString("yyyy-MM-dd") == key).FirstOrDefault();
-                if (open == null)
-                {
-                    return 0;
-                }
-                double workHour = new TimeSpan(open.EDateTimeDate.Value.Ticks - open.SDateTime.Value.Ticks).TotalHours;
-                return workHour;
+                return 0;
             }
 
+            double workHour = new TimeSpan(open.EDateTimeDate.Value.Ticks - open.SDateTime.Value.Ticks).TotalHours;
+            return workHour;
+        }
+
+
+        [HttpGet]
+        [Route("Brand/vip")]
+        [JwtAuthFilter]
+        public IHttpActionResult GetOrder()
+        {
+            string token = Request.Headers.Authorization.Parameter;
+            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
+            int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
+            SqlConnection Conn = new SqlConnection();
+            Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
+            DataTable dt = new DataTable();
+            SqlCommand cmd = new SqlCommand(@"select distinct ProductName from ProductLists where BrandId=" + id, Conn);
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            adapter.Fill(dt);
+            string query = @"select *,{col1} as 總額
+            from(select x.Orderdate,{col2}
+            from(select *
+                 from(
+                     select Convert(varchar(10), o.OrderTime, 111) Orderdate, od.ProductName, od.Amount
+                from Orders o inner
+                join OrderDetails od
+            on o.Id = od.OrderId
+            where BrandId = 1
+                )t
+                pivot
+            (
+                sum(Amount)
+            for ProductName in ({col3})
+            )p
+                )x)z";
+            StringBuilder sbCol1 = new StringBuilder();
+            foreach (DataRow item in dt.Rows)
+            {
+                sbCol1.Append($"z.{item[0]}+");
+            }
+
+            string col1 = sbCol1.ToString().TrimEnd('+');
+            StringBuilder sbCol2 = new StringBuilder();
+            foreach (DataRow item in dt.Rows)
+            {
+                sbCol2.Append($"isnull(x.{item[0]},0){item[0]},");
+            }
+
+            string col2 = sbCol2.ToString().TrimEnd(',');
+            StringBuilder sbCol3 = new StringBuilder();
+            foreach (DataRow item in dt.Rows)
+            {
+                sbCol3.Append($"[{item[0]}],");
+            }
+
+            string col3 = sbCol3.ToString().TrimEnd(',');
+            query = query.Replace("{col1}", col1.ToString());
+            query = query.Replace("{col2}", col2.ToString());
+            query = query.Replace("{col3}", col3.ToString());
+            DataTable vip = new DataTable();
+            SqlCommand Cmd = new SqlCommand(query, Conn);
+            SqlDataAdapter adapter1 = new SqlDataAdapter(Cmd);
+            adapter1.Fill(vip);
+            return Ok(new
+            {
+                vip
+            });
 
 
 
-          
-        
-
-        //List<Order> orders = db.Orders.Where(o => o.BrandId == id && o.OrderTime > DateTime.Today).ToList();
-        ////var amount = orders.Where(x =>x.OrderTime).Select(y=>y.Amount).Sum(new
-        ////{
-        ////    total =orders.Sum
-        ////});
-        //var sales = db.Orders.Select(c => c.Id).Count();
-        ////var amount = db.Orders.Select(c => c.Amount).Sum();
-        //var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
-        //{
-        //    x.OrderTime,
-
-        //});
-
-        ////var sales = db.Orders.Select(c => c.Id).Count();
-        ////var amount = db.Orders.Select(c => c.Amount).Sum();
-        ////var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
-        ////{
-        ////    x.OrderTime,
-        ////});
 
 
 
-        //var openTime = db.OpenTimes.Where(c => EntityFunctions.DiffDays(c.EDateTimeDate, c.SDateTime) > 1).ToList();
 
-        //return Ok(new
-        //{
-        //    sales,
-        //    amount,
-        //    orderTime
+            //List<Order> orders = db.Orders.Where(o => o.BrandId == id && o.OrderTime > DateTime.Today).ToList();
+            ////var amount = orders.Where(x =>x.OrderTime).Select(y=>y.Amount).Sum(new
+            ////{
+            ////    total =orders.Sum
+            ////});
+            //var sales = db.Orders.Select(c => c.Id).Count();
+            ////var amount = db.Orders.Select(c => c.Amount).Sum();
+            //var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
+            //{
+            //    x.OrderTime,
 
-        //    //orderTime
+            //});
 
-        //});
+            ////var sales = db.Orders.Select(c => c.Id).Count();
+            ////var amount = db.Orders.Select(c => c.Amount).Sum();
+            ////var orderTime = db.Orders.Where(x => x.BrandId == id).Select(x => new
+            ////{
+            ////    x.OrderTime,
+            ////});
+
+
+
+            //var openTime = db.OpenTimes.Where(c => EntityFunctions.DiffDays(c.EDateTimeDate, c.SDateTime) > 1).ToList();
+
+            //return Ok(new
+            //{
+            //    sales,
+            //    amount,
+            //    orderTime
+
+            //    //orderTime
+
+            //});
+        }
+
     }
-
 }
