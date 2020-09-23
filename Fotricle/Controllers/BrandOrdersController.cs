@@ -373,18 +373,6 @@ namespace Fotricle.Controllers
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
-            //SqlConnection Conn = new SqlConnection();
-            //Conn.ConnectionString = ConfigurationManager.ConnectionStrings["Model1"].ConnectionString;
-            //DataTable dt = new DataTable();
-            //string query =
-            //    "select x.orderdate,x.ordernums,x.orderamount,workhours from (select count(o.Id) ordernums," +
-            //    "convert(varchar, o.OrderTime, 112) orderdate,sum(o.Amount) orderamount,BrandId from orders o group by BrandId," +
-            //    "convert(varchar, OrderTime, 112))x left join (select Date,DATEDIFF(HOUR, SDateTime, EDateTimeDate) workhours,BrandId from OpenTimes)y " +
-            //    "on right(convert(varchar, x.orderdate, 112),4)=y.Date where x.BrandId=@id";
-            //SqlCommand cmd = new SqlCommand(query, Conn);
-            //cmd.Parameters.AddWithValue("@id", id);
-            //SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-            //adapter.Fill(dt);
             List<Order> orders = db.Orders.Where(o => o.BrandId == id).ToList();
             var idopen = db.OpenTimes.Where(x => x.BrandId == id && x.Status == OpenOrNot.營業中).ToList();
 
@@ -456,7 +444,6 @@ namespace Fotricle.Controllers
                 from Orders o inner
                 join OrderDetails od
             on o.Id = od.OrderId
-            where BrandId = 1
                 )t
                 pivot
             (
