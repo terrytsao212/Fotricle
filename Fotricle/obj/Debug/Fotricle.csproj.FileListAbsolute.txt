@@ -629,7 +629,6 @@ C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\bin\zh-Hant\System.We
 C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\bin\zh-Hant\System.Web.WebPages.resources.dll
 C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\bin\zh-Hant\System.Web.WebPages.Deployment.resources.dll
 C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\bin\zh-Hant\System.Web.WebPages.Razor.resources.dll
-C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\obj\Debug\Fotricle.csprojAssemblyReference.cache
 C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.addFotricle.resources
 C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.newViporder.resources
 C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\obj\Debug\Fotricle.Migrations.addcustomer.resources
@@ -640,3 +639,4 @@ C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\obj\Debug\Fotricle.cs
 C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\obj\Debug\Fotricle.csproj.CopyComplete
 C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\obj\Debug\Fotricle.dll
 C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\obj\Debug\Fotricle.pdb
+C:\Users\admin\Desktop\Fotricle_20200922\Fotricle\Fotricle\obj\Debug\Fotricle.csprojAssemblyReference.cache
