@@ -61,16 +61,18 @@ namespace Fotricle.Controllers
             //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
+            var feedback = db.FeedBacks.ToList();
             //Brand brand = new Brand();
-            var feedback = db.FeedBacks.Select(f => new
+            var fback = feedback.Select(f => new
             {
-                //f.CustomerId,
+                f.CustomerId,
                 f.Customer.UserName,
                 f.Customer.CusPhoto,
-                //f.Order.BrandId,
-                //f.Guid,
-                //f.OrderId,
-                f.Food,
+                feedbackDate= f.InitDate.Value.ToString("yyyy-MM-dd"),
+                f.Order.BrandId,
+               // f.Guid,
+                f.OrderId,
+                f.Food, 
                 f.Service,
                 f.AllSuggest,
                 f.CarSuggest,
@@ -78,7 +80,7 @@ namespace Fotricle.Controllers
             return Ok(new
             {
                 result = true,
-                feedback
+                fback
             });
 
         }
