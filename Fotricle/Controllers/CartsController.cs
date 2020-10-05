@@ -51,7 +51,7 @@ namespace Fotricle.Controllers
                 //餐車業主
                 var Brand = db.Brands.FirstOrDefault(b => b.Id == Product.BrandId);
 
-                var image = db.ProductLists.FirstOrDefault(p => p.Id == viewCart.ProductListId).ProductPhoto;
+               var image = db.ProductLists.FirstOrDefault(p => p.Id == viewCart.ProductListId).ProductPhoto;
 
                 db.Carts.Add(new Cart
                 {
@@ -191,7 +191,8 @@ namespace Fotricle.Controllers
             }
             Cart cart = new Cart();
             int id_temp = Convert.ToInt32(id);
-            cart = db.Carts.Where(c => c.Id == id_temp).FirstOrDefault();
+            cart = db.Carts.FirstOrDefault(c => c.Id == id_temp);
+                   //db.Carts.Where(c => c.Id == id_temp).FirstOrDefault();
             cart.ProductUnit = viewCart.ProductUnit;
             cart.Amount = viewCart.ProductUnit * cart.ProductPrice;
             //cart.Amount = viewCart.Amount;

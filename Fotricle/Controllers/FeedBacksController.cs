@@ -27,24 +27,27 @@ namespace Fotricle.Controllers
             //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
-            Brand brand = db.Brands.Find(id);
-            var feedback = db.FeedBacks.ToList();
-            var fback = feedback.Where(f => f.Order.BrandId == id)
-                .Select(f => new
+           // Brand brand = db.Brands.Find(id);
+            var feedback = db.FeedBacks.Where(f => f.Order.BrandId == id).ToList();
+            var fback = new
+            {
+                feedback = feedback.Select(f => new
                 {
-
                     f.CustomerId,
                     f.Customer.UserName,
                     f.Customer.CusPhoto,
                     f.Order.BrandId,
                     Date = f.InitDate.Value.ToString("yyyy-MM-dd"),
-                   // f.Guid,
                     f.OrderId,
                     f.Food,
                     f.Service,
                     f.AllSuggest,
                     f.CarSuggest,
-                });
+
+                }),
+            };
+               
+               
             return Ok(new
             {
                 result = true,
@@ -63,15 +66,12 @@ namespace Fotricle.Controllers
             //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
-            var feedback = db.FeedBacks.ToList();
-            //Brand brand = new Brand();
-            var Fback = feedback.Select(f => new
+            var Fback = db.FeedBacks.Select(f => new
             {
                 f.CustomerId,
                 f.Customer.UserName,
                 f.Customer.CusPhoto,
                 f.Order.BrandId,
-               // f.Guid,
                 f.OrderId,
                 f.Food, 
                 f.Service,

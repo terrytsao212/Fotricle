@@ -150,9 +150,7 @@ namespace Fotricle.Controllers
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             Customer customer = db.Customers.Find(id);
 
-            try
-            {
-                var file = HttpContext.Current.Request.Files.Count > 0
+            var file = HttpContext.Current.Request.Files.Count > 0
                     ? HttpContext.Current.Request.Files[0] : null;
 
                 if (file != null && file.ContentLength > 0)
@@ -191,12 +189,7 @@ namespace Fotricle.Controllers
                     message = "請選擇上傳圖片!"
                 });
 
-            }
-
-            catch
-            {
-                throw;
-            }
+          
         }
 
 
