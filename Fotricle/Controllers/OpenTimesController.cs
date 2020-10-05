@@ -27,10 +27,10 @@ namespace Fotricle.Controllers
             //string token = Request.Headers.Authorization.Parameter;
             //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-            Brand brand = db.Brands.Find(id);
+          // Brand brand = db.Brands.Find(id);
 
-            var openTimes = db.OpenTimes.Where(o => o.BrandId == id);
-            List<OpenTime> open = openTimes.ToList();
+          var open= db.OpenTimes.Where(o => o.BrandId == id).ToList();
+          
 
             var result = new
             {
@@ -49,21 +49,10 @@ namespace Fotricle.Controllers
                 }),
             };
 
-
-            //var open = db.OpenTimes.Where(c => c.BrandId == id).Select(c => new
-            //{
-            //    id=c.Id,
-            //    c.BrandId,
-            //    c.Date,
-            //    c.SDateTime,
-            //    c.EDateTimeDate,
-            //    c.OpenDate,
-            //    status = c.Status.ToString(),
-            //    c.Location
-
-            //});
-            return Ok(new { success = true, result });
-
+            return Ok(new 
+                { success = true, 
+                    result
+                });
 
         }
 
@@ -127,7 +116,7 @@ namespace Fotricle.Controllers
         [JwtAuthFilter]
         [System.Web.Http.Route("OpenTime/Edit")]
 
-        public IHttpActionResult EditOpenTime(string id,
+        public IHttpActionResult EditOpenTime(int id,
             [Bind(Include = "Id,Date,Status,SDateTime,EDateTimeDate,OpenDate,Location")]OpenTime openTime)
         {
             if (!ModelState.IsValid)
@@ -135,8 +124,7 @@ namespace Fotricle.Controllers
                 return BadRequest(ModelState);
             }
             OpenTime open=new OpenTime();
-            int id_temp = Convert.ToInt32(id);
-            open = db.OpenTimes.Where(x => x.Id == id_temp).FirstOrDefault();
+            open = db.OpenTimes.FirstOrDefault(x => x.Id == id);
             open.Date = openTime.Date;
             open.Location = openTime.Location;
             open.SDateTime = openTime.SDateTime;

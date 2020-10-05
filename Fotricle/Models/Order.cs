@@ -60,7 +60,7 @@ namespace Fotricle.Models
         [MaxLength(length: 100)]//指定後面nvchar為50
         public string Remarks { set; get; }
 
-        [Display(Name = "備註1")]
+        [Display(Name = "備註1")]//記得標示清楚
         [MaxLength(length: 100)]//指定後面nvchar為50
         public string Remark1 { set; get; }
 

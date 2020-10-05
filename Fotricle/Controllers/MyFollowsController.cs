@@ -118,9 +118,9 @@ namespace Fotricle.Controllers
                     message = "此餐車已經加入追蹤"
                 });
             }
-            var Brand = db.Brands.FirstOrDefault(b => b.Id == myFollow.BrandId);
+            
             myFollow.CustomerId = id;
-            myFollow.BrandName = db.Brands.FirstOrDefault(b => b.Id == myFollow.BrandId).BrandName;
+            myFollow.BrandName = db.Brands.FirstOrDefault(b => b.Id == myFollow.BrandId).BrandName;//換成show brandid
             db.MyFollows.Add(myFollow);
             db.SaveChanges();
             return Ok(new

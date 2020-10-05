@@ -82,7 +82,7 @@ namespace Fotricle.Controllers
             //string token = Request.Headers.Authorization.Parameter;
             //JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             //int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
-            Brand brand = db.Brands.Find(id);
+           // Brand brand = db.Brands.Find(id);
             var products = db.ProductLists.Where(c => c.BrandId == id).Select(c => new
             {
                 c.Id,
@@ -157,15 +157,14 @@ namespace Fotricle.Controllers
         [System.Web.Http.HttpPatch]
         [JwtAuthFilter]
         [System.Web.Http.Route("ProductList/Edit")]
-        public IHttpActionResult EditProduct(string id, [Bind(Include = "Id,ProductName,ProductDetail,ProductPhoto,Unit,Price,ProductSort,Total")] ViewProducts viewProducts)
+        public IHttpActionResult EditProduct(int id, [Bind(Include = "Id,ProductName,ProductDetail,ProductPhoto,Unit,Price,ProductSort,Total")] ViewProducts viewProducts)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             ProductList product = new ProductList();
-            int id_temp = Convert.ToInt32(id);
-            product = db.ProductLists.Where(x => x.Id == id_temp).FirstOrDefault();
+            product = db.ProductLists.FirstOrDefault(x => x.Id == id);
             product.ProductName = viewProducts.ProductName;
             product.ProductDetail = viewProducts.ProductDetail;
             product.ProductPhoto = viewProducts.ProductPhoto;
@@ -197,8 +196,7 @@ namespace Fotricle.Controllers
             }
 
            // ViewProducts productsList =new ViewProducts();
-            int id_temp = Convert.ToInt32(id);
-            ProductList productsList = db.ProductLists.Where(x => x.Id==id_temp).FirstOrDefault();
+           ProductList productsList = db.ProductLists.FirstOrDefault(x => x.Id==id);
             productsList.IsUse = viewBool.IsUse;
             db.Entry(productsList).State = EntityState.Modified;
             db.SaveChanges();
@@ -281,8 +279,7 @@ namespace Fotricle.Controllers
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             Brand brand = db.Brands.Find(id);
 
-            try
-            {
+        
                 var file = HttpContext.Current.Request.Files.Count > 0
                     ? HttpContext.Current.Request.Files[0]
                     : null;
@@ -325,12 +322,9 @@ namespace Fotricle.Controllers
                     message = "請選擇上傳圖片!"
                 });
 
-            }
-            catch
-            {
-                throw;
-            }
         }
+           
+        
 
 
 
