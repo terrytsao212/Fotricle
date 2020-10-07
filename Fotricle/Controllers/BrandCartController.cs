@@ -35,7 +35,7 @@ namespace Fotricle.Controllers
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
 
             bool isCart = db.Carts
-                .Where(c => c.BrandId == id)
+                .Where(c => c.BrandId == id&&c.CustomerId==0)
                 .Any(c => c.ProductListId == viewBrandCart.ProductListId);
 
             if (isCart) //購物車有相同的商品

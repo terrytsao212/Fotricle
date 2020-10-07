@@ -40,6 +40,13 @@ namespace Fotricle.Models
         [MaxLength(length: 50)]//最大長度為200
         public string Location { set; get; }
 
+        [Display(Name = "經度")]
+        
+        public string Longitude { set; get; }
+
+        [Display(Name = "緯度")]
+        public string Latitude { set; get; }
+
         [Display(Name = "建立時間")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? InitDate { set; get; }//"?"為允許空值，日期數字才可使用問號
