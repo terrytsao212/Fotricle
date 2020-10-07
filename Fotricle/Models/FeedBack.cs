@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace Fotricle.Models
 {
@@ -22,12 +23,13 @@ namespace Fotricle.Models
 
         [Display(Name = "訂單編號")]
         [ForeignKey("OrderId")]
+        [JsonIgnore]
         public virtual Order Order { set; get; }//virtual的意思是虛擬的
 
-
+        [Display(Name = "客戶編號")]
         public int CustomerId { get; set; }
         [ForeignKey("CustomerId")]
-        [Display(Name = "客戶編號")]
+        [JsonIgnore]
         public virtual Customer Customer { set; get; }
 
         [Display(Name = "餐點滿意程度")]

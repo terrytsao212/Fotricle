@@ -56,7 +56,7 @@ namespace Fotricle.Controllers
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             int id = Convert.ToInt32(jwtAuthUtil.GetId(token));
             var brand = db.Brands.FirstOrDefault(b => b.Id == id);
-            var orders = db.Orders.Where(o => o.Id == viewNoitce.OrderId).FirstOrDefault();
+            var orders = db.Orders.FirstOrDefault(o => o.Id == viewNoitce.OrderId);
 
             Notice notice = new Notice();
 
@@ -76,16 +76,15 @@ namespace Fotricle.Controllers
         //修改顧客訊息通知是否已讀
         [System.Web.Http.HttpPatch]
         [System.Web.Http.Route("notice/update")]
-        public IHttpActionResult PatchBrands(string id, [Bind(Include = "Id,Isread")] ViewNoitce viewNoitce)
+        public IHttpActionResult PatchBrands(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             Notice notice = new Notice();
-            int id_temp = Convert.ToInt32(id);
-            notice = db.Notices.Where(x => x.Id == id_temp).FirstOrDefault();
-            notice.IsRead = viewNoitce.IsRead;
+            notice = db.Notices.FirstOrDefault(x => x.Id == id);
+            notice.IsRead = ReadOrNot.是;
             db.Entry(notice).State = EntityState.Modified;
             db.SaveChanges();
             return Ok(new
