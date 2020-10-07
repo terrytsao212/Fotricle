@@ -28,6 +28,7 @@ namespace Fotricle.Models
         public virtual DbSet<ProductList> ProductLists { get; set; }
         public virtual DbSet<MyFollow> MyFollows { get; set; }
         public virtual DbSet<VipOrder> VipOrders { get; set; }
+        public virtual DbSet<BrandCart> BrandCarts { get; set; }
 
     }
 }
